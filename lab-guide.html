@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 5 | Hướng dẫn Segmentation trên CVAT</title>
+  <style>
+    :root {
+      --paper: oklch(0.985 0.004 245);
+      --surface: oklch(1 0 0);
+      --ink: oklch(0.22 0.025 250);
+      --muted: oklch(0.43 0.025 250);
+      --line: oklch(0.82 0.015 250);
+      --accent: oklch(0.43 0.15 260);
+      --accent-light: oklch(0.94 0.025 260);
+      --caution: oklch(0.34 0.09 68);
+      --caution-bg: oklch(0.95 0.04 72);
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --radius: 8px;
+      --ease: cubic-bezier(0.25, 1, 0.5, 1);
+      font-family: "Be Vietnam Pro", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-size: 1rem; line-height: 1.65; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: var(--radius); }
+    .skip { position: absolute; left: var(--space-4); top: -80px; background: var(--surface); padding: var(--space-3); z-index: 10; }
+    .skip:focus { top: var(--space-4); }
+    header { border-bottom: 1px solid var(--line); background: var(--surface); }
+    .bar { max-width: 1280px; margin: auto; min-height: 64px; padding: var(--space-2) var(--space-6); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+    .brand { font-weight: 700; color: var(--ink); text-decoration: none; white-space: nowrap; }
+    nav { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    nav a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 var(--space-3); color: var(--ink); text-decoration: none; font-weight: 600; border-radius: var(--radius); }
+    nav a:hover, nav a:active { background: var(--accent-light); }
+    main { max-width: 1280px; margin: auto; padding: 0 var(--space-6) var(--space-16); }
+    .hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(280px, 5fr); gap: var(--space-12); padding: var(--space-16) 0; align-items: end; }
+    .eyebrow { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 var(--space-4); }
+    h1, h2, h3 { line-height: 1.18; text-wrap: balance; }
+    h1 { font-size: clamp(2.75rem, 5vw, 5rem); letter-spacing: -.025em; margin: 0 0 var(--space-6); max-width: 14ch; }
+    h2 { font-size: clamp(2rem, 3vw, 3rem); margin: 0 0 var(--space-6); }
+    h3 { font-size: 1.35rem; margin: 0 0 var(--space-3); }
+    p { max-width: 72ch; text-wrap: pretty; }
+    .lead { font-size: 1.2rem; max-width: 62ch; margin: 0; }
+    .quickstart { background: var(--accent-light); padding: var(--space-8); border-radius: var(--radius); }
+    .quickstart h2 { font-size: 1.4rem; margin-bottom: var(--space-4); }
+    .quickstart ol { margin: 0; padding-left: var(--space-6); }
+    .quickstart li + li { margin-top: var(--space-3); }
+    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: var(--space-2) var(--space-4); margin-top: var(--space-6); border: 2px solid var(--accent); border-radius: var(--radius); text-decoration: none; font-weight: 700; background: var(--accent); color: var(--surface); transition: transform 150ms var(--ease), background-color 150ms var(--ease); }
+    .action:hover { transform: translateY(-2px); background: var(--ink); border-color: var(--ink); color: var(--surface); }
+    .action:active { transform: translateY(2px); }
+    section { padding: var(--space-16) 0; border-top: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-12); align-items: start; margin-bottom: var(--space-8); }
+    .section-head p { margin-top: var(--space-2); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); font-variant-numeric: tabular-nums; }
+    th, td { padding: var(--space-4); text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: .9rem; background: var(--accent-light); }
+    .step { display: grid; grid-template-columns: minmax(240px, 4fr) minmax(0, 8fr); gap: var(--space-8); align-items: start; padding: var(--space-8) 0; border-top: 1px solid var(--line); }
+    .step:first-of-type { border-top: 0; }
+    .step .number { font-size: .85rem; color: var(--accent); font-weight: 700; margin: 0 0 var(--space-3); }
+    .step p { margin: 0 0 var(--space-3); }
+    figure { margin: 0; }
+    figure a { display: block; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+    figure a:hover img { transform: scale(1.01); }
+    figure img { display: block; width: 100%; height: auto; transition: transform 200ms var(--ease); }
+    figcaption { color: var(--muted); font-size: .9rem; padding-top: var(--space-2); }
+    .note { background: var(--caution-bg); color: var(--caution); padding: var(--space-4) var(--space-6); border-radius: var(--radius); max-width: 78ch; }
+    .timeline { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
+    .block { border-top: 2px solid var(--ink); padding-top: var(--space-4); }
+    .block strong { font-variant-numeric: tabular-nums; }
+    .block p { margin-bottom: 0; }
+    .list { max-width: 75ch; padding-left: var(--space-6); }
+    .list li + li { margin-top: var(--space-3); }
+    .footer { border-top: 1px solid var(--line); padding: var(--space-8) 0; color: var(--muted); }
+    @media (max-width: 760px) {
+      .bar { align-items: flex-start; flex-direction: column; padding: var(--space-3) var(--space-4); }
+      nav { width: 100%; }
+      nav a { padding: 0 var(--space-2); }
+      main { padding: 0 var(--space-4) var(--space-12); }
+      .hero, .section-head, .step, .timeline { grid-template-columns: 1fr; gap: var(--space-6); }
+      .hero, section { padding: var(--space-12) 0; }
+      h1 { max-width: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .action, figure img { transition: none; }
+      .action:hover, .action:active, figure a:hover img { transform: none; }
+    }
+    @media print {
+      nav, .action { display: none; }
+      body { background: var(--surface); }
+      main { max-width: none; }
+      .step { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Đến nội dung chính</a>
+  <header>
+    <div class="bar">
+      <a class="brand" href="#top">Day 5 / Segmentation Lab</a>
+      <nav aria-label="Mục lục">
+        <a href="#mission">Bài làm</a>
+        <a href="#cvat">CVAT từng bước</a>
+        <a href="#schedule">240 phút</a>
+        <a href="#submit">Nộp bài</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="hero" id="top">
+      <div>
+        <p class="eyebrow">Hướng dẫn học viên</p>
+        <h1>Vẽ đúng, tự kiểm, giải thích được.</h1>
+        <p class="lead">Một bài Day 5 trong 240 phút: semantic, instance, panoptic và sáu ca khó. Bạn làm trên CVAT local, lưu export và viết một report.</p>
+      </div>
+      <aside class="quickstart" aria-label="Bắt đầu nhanh">
+        <h2>Bắt đầu bằng ba việc</h2>
+        <ol>
+          <li>Mở CVAT local của lớp bằng Chrome hoặc Edge.</li>
+          <li>Đọc tên lớp trong <code>classes.json</code> của task trước khi vẽ.</li>
+          <li>Tạo task Easy với đúng ba ảnh rồi bắt đầu.</li>
+        </ol>
+        <a class="action" href="#cvat">Xem thao tác CVAT</a>
+      </aside>
+    </div>
+
+    <section id="mission" aria-labelledby="mission-title">
+      <div class="section-head">
+        <h2 id="mission-title">Bài làm của bạn</h2>
+        <p>Đây là cấu trúc bài starter: ba cấp độ và sáu checkpoint, cùng một thang tối đa 100 điểm. Không có bài bắt buộc về nhà.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Task</th><th>Ảnh</th><th>Cần vẽ</th><th>Export</th><th>Điểm tối đa</th></tr></thead>
+          <tbody>
+            <tr><td><code>easy_semantic</code></td><td>3</td><td>Vùng road, sidewalk, building, vegetation, sky</td><td>Segmentation mask 1.1</td><td>20</td></tr>
+            <tr><td><code>medium_instance</code></td><td>3</td><td>Mỗi người/xe là một mask riêng</td><td>COCO 1.0</td><td>32</td></tr>
+            <tr><td><code>hard_panoptic</code></td><td>2</td><td>Stuff + từng thing</td><td>COCO 1.0</td><td>30</td></tr>
+            <tr><td><code>cp1</code> đến <code>cp6</code></td><td>1 mỗi trạm</td><td>Lỗ, tách, nét mảnh, bó vỉa, che khuất, phủ vùng</td><td>Theo loại task</td><td>18</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Ảnh chụp CVAT bên dưới dùng để chỉ vị trí nút bấm. Ảnh xe và lớp hiện trong screenshot chỉ là ví dụ giao diện, không phải ảnh hoặc lớp của bài chấm. Hãy dùng đúng ảnh và <code>classes.json</code> trong repo này.</p>
+    </section>
+
+    <section id="cvat" aria-labelledby="cvat-title">
+      <div class="section-head">
+        <h2 id="cvat-title">CVAT từng bước</h2>
+        <p>Nhấp vào từng ảnh để mở ở kích thước gốc và phóng to trong trình duyệt. Các nút có thể đổi nhẹ theo phiên bản CVAT local của lớp.</p>
+      </div>
+
+      <article class="step">
+        <div><p class="number">01 / Tạo task</p><h3>Đặt tên và chọn đúng ảnh</h3><p>Vào <strong>Tasks → Create new task</strong>. Tên task phải khớp mã trong bảng trên. Ảnh nằm trong thư mục <code>data/tiers</code> hoặc <code>data/checkpoints</code> của task tương ứng.</p><p>Mỗi task là một bài riêng, không trộn ảnh Easy với Medium.</p></div>
+        <figure><a href="docs/images/03-task-form.png" target="_blank" rel="noopener"><img src="docs/images/03-task-form.png" alt="Màn hình Create a new task của CVAT local, có ô Name, Labels và vùng Select files" width="3300" height="1900" loading="lazy"></a><figcaption>Chọn Name, thêm Labels, kéo ảnh vào Select files. Nhấp ảnh để xem lớn.</figcaption></figure>
+      </article>
+
+      <article class="step">
+        <div><p class="number">02 / Khai báo lớp</p><h3>Chép đúng tên trong classes.json</h3><p>Bấm <strong>Add label</strong>, nhập từng tên trong <code>classes.json</code> của task. Không tự đổi dấu cách, số ít hoặc số nhiều. Ví dụ <code>traffic sign</code> phải giữ nguyên dấu cách.</p><p>Nếu đã tạo sai lớp và vẽ nhiều mask, hỏi coach cách sửa trước khi làm tiếp.</p></div>
+        <figure><a href="docs/images/04-label.png" target="_blank" rel="noopener"><img src="docs/images/04-label.png" alt="Ô Label name và nút Continue trên màn hình thêm label của CVAT" width="3300" height="1900" loading="lazy"></a><figcaption>Ô Label name trong CVAT. Tên lớp của ảnh minh họa không thay cho classes.json của bài.</figcaption></figure>
+      </article>
+
+      <article class="step">
+        <div><p class="number">03 / Vẽ mask</p><h3>Chọn Brush hoặc Polygon</h3><p>Mở Job. Với semantic, tô từng vùng theo lớp. Với instance, mỗi vật đếm được là một mask. Dùng thanh Objects bên phải để kiểm số lượng và class. Phóng to khi vẽ nét mảnh hoặc vùng bị che.</p><p>Ở Medium, tự vẽ một object đầu trước khi xem gợi ý và ghi quyết định trong report.</p></div>
+        <figure><a href="docs/images/08-brush.png" target="_blank" rel="noopener"><img src="docs/images/08-brush.png" alt="Giao diện Job của CVAT với công cụ Draw a mask bên trái, ảnh giữa và danh sách Labels bên phải" width="1654" height="970" loading="lazy"></a><figcaption>Công cụ Draw a mask ở thanh trái. Danh sách Labels/Objects ở bên phải.</figcaption></figure>
+      </article>
+
+      <article class="step">
+        <div><p class="number">04 / Save và tự kiểm</p><h3>Đừng chỉ nhìn màu mask</h3><p>Bấm <strong>Save</strong>. Đổi ảnh rồi quay lại để chắc nhãn đã lưu. Tự kiểm theo thứ tự: đúng ảnh, đúng lớp, đủ object, biên không tràn, không gộp hoặc tách sai.</p><p>Không có SAM vẫn làm được bằng Brush/Polygon. Nếu có gợi ý, bạn phải sửa biên và giải thích quyết định của mình.</p></div>
+        <figure><a href="docs/images/10-export-menu.png" target="_blank" rel="noopener"><img src="docs/images/10-export-menu.png" alt="Thanh trên CVAT Job có nút Save và menu chứa Export job dataset" width="1654" height="970" loading="lazy"></a><figcaption>Nút Save ở thanh trên. Menu góc trái có Export job dataset.</figcaption></figure>
+      </article>
+
+      <article class="step">
+        <div><p class="number">05 / Export</p><h3>Chọn format theo task</h3><p>Trong menu Job, chọn <strong>Export job dataset</strong>. Easy và checkpoint semantic dùng <strong>Segmentation mask 1.1</strong>. Medium, Hard và checkpoint instance dùng <strong>COCO 1.0</strong>. Đặt tên ZIP theo mã task.</p><p>Nếu không thấy format hoặc export lỗi: giữ bản Save, chụp lỗi và báo coach. Không sửa dữ liệu trong ZIP bằng tay.</p></div>
+        <figure><a href="docs/images/11-export-format.png" target="_blank" rel="noopener"><img src="docs/images/11-export-format.png" alt="Hộp thoại Export job as a dataset của CVAT, menu định dạng đang chọn COCO 1.0" width="1654" height="970" loading="lazy"></a><figcaption>Ví dụ chọn COCO 1.0 cho task instance/panoptic. Semantic cần cuộn menu để chọn Segmentation mask 1.1.</figcaption></figure>
+      </article>
+    </section>
+
+    <section id="schedule" aria-labelledby="schedule-title">
+      <div class="section-head"><h2 id="schedule-title">Lộ trình 240 phút</h2><p>Giữ hai lần nghỉ, thời gian tự QC và thời gian nộp. Người làm nhanh phân tích sâu lỗi khó, không nhận thêm điểm.</p></div>
+      <div class="timeline">
+        <div class="block"><strong>0–45 phút</strong><h3>Chuẩn bị và Easy</h3><p>Vào CVAT, tạo task, tô 3 ảnh semantic, Save và export.</p></div>
+        <div class="block"><strong>45–110 phút</strong><h3>Medium instance</h3><p>Tự vẽ object đầu, làm 3 ảnh, kiểm gộp/tách và export COCO.</p></div>
+        <div class="block"><strong>110–120 phút</strong><h3>Nghỉ</h3><p>Giữ ZIP đã xuất; quay lại làm Hard.</p></div>
+        <div class="block"><strong>120–175 phút</strong><h3>Hard panoptic</h3><p>Vẽ stuff và từng thing trên 2 ảnh, tự QC và export.</p></div>
+        <div class="block"><strong>175–185 phút</strong><h3>Nghỉ</h3><p>Chuẩn bị cho các ca ngắn.</p></div>
+        <div class="block"><strong>185–240 phút</strong><h3>Checkpoint, report, nộp</h3><p>Làm sáu trạm theo thời gian còn lại, ghi lỗi đã sửa và ba ca cân nhắc, nộp trước phút 240.</p></div>
+      </div>
+    </section>
+
+    <section id="submit" aria-labelledby="submit-title">
+      <div class="section-head"><h2 id="submit-title">Một lần nộp cuối ngày</h2><p>Coach nhận các ZIP export và một report theo cùng mẫu. Không cần cài Python hoặc tự chấm khi repo không có ground truth.</p></div>
+      <ol class="list">
+        <li>Kiểm file ZIP tên đúng mã task, mở được, và có dữ liệu xuất từ CVAT.</li>
+        <li>Sao chép mẫu <a href="reports/REPORT_TEMPLATE.md">REPORT_TEMPLATE.md</a> thành <code>REPORT.md</code>, điền bài đã làm và phần còn thiếu.</li>
+        <li>Ghi một lỗi đã sửa, một quyết định tự làm trước gợi ý, và ba ca chưa chắc hoặc đã cân nhắc.</li>
+        <li>Nộp theo kênh lớp thông báo. Nếu lỗi export, ghi task và báo coach trước khi hết giờ.</li>
+      </ol>
+      <p class="note">Điểm tối đa là 100 trong lớp. IoU giữa hai mask chỉ là độ giống nhau. Người chấm giữ reference riêng và trả feedback; bạn không phải đoán điểm hoặc làm ở nhà để bù.</p>
+    </section>
+    <div class="footer">Day 5 Segmentation Data Lab. Ảnh và taxonomy bài làm lấy từ starter Day 5 commit <code>3bff13d</code>; ảnh giao diện lấy từ CVAT local dùng để hướng dẫn thao tác.</div>
+  </main>
+</body>
+</html>
