@@ -67,6 +67,17 @@ class ReleaseContract(unittest.TestCase):
             self.assertIn(row, report)
         self.assertIn("**100**", report)
 
+    def test_five_notebooks_are_valid_and_compile(self):
+        notebooks = sorted((ROOT / "notebooks").glob("*.ipynb"))
+        self.assertEqual(len(notebooks), 5)
+        for path in notebooks:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(payload["nbformat"], 4, path.name)
+            self.assertTrue(payload["cells"], path.name)
+            for cell in payload["cells"]:
+                if cell["cell_type"] == "code":
+                    compile("".join(cell["source"]), path.name, "exec")
+
 
 if __name__ == "__main__":
     unittest.main()

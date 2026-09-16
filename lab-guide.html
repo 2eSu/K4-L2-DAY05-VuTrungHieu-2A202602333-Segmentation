@@ -114,6 +114,7 @@
         <a href="#mission">Bài làm</a>
         <a href="#cvat">CVAT từng bước</a>
         <a href="#schedule">240 phút</a>
+        <a href="#self-check">Tự kiểm</a>
         <a href="#submit">Nộp bài</a>
       </nav>
     </div>
@@ -199,13 +200,22 @@
       </div>
     </section>
 
+    <section id="self-check" aria-labelledby="self-check-title">
+      <div class="section-head"><h2 id="self-check-title">Tự kiểm nếu bạn muốn</h2><p>Phần này giúp xem lại ZIP đã export, không phải bài tập thêm. Bạn không cần cài Python hay mở notebook để được chấm; cứ kiểm bằng mắt trong CVAT và nộp export + report.</p></div>
+      <div class="timeline">
+        <div class="block"><strong>Cho người mới</strong><h3>Kiểm trong CVAT</h3><p>Mở lần lượt ảnh, kiểm class, số vật, ranh giới; bấm Save. Export đúng format, mở thử ZIP và xem có dữ liệu. Nếu không chắc, ghi câu hỏi vào report.</p></div>
+        <div class="block"><strong>Nếu đã có Jupyter</strong><h3>Năm notebook theo lộ trình</h3><p><a href="notebooks/README.md">Mở notebook 01–05</a> để nhận ảnh, xem mask semantic, đếm mask instance, kiểm panoptic và gói nộp. Notebook không có đáp án và không tạo điểm.</p></div>
+      </div>
+      <p class="note">Nếu máy có Python 3 nhưng không có Jupyter, xem <a href="docs/SUBMISSION.md">lệnh kiểm ZIP và hướng dẫn nộp</a>. Dòng “OK” chỉ xác nhận cấu trúc export, không chứng minh mask đúng.</p>
+    </section>
+
     <section id="submit" aria-labelledby="submit-title">
       <div class="section-head"><h2 id="submit-title">Một lần nộp cuối ngày</h2><p>Coach nhận các ZIP export và một report theo cùng mẫu. Không cần cài Python hoặc tự chấm khi repo không có ground truth.</p></div>
       <ol class="list">
         <li>Kiểm file ZIP tên đúng mã task, mở được, và có dữ liệu xuất từ CVAT.</li>
         <li>Sao chép mẫu <a href="reports/REPORT_TEMPLATE.md">REPORT_TEMPLATE.md</a> thành <code>REPORT.md</code>, điền bài đã làm và phần còn thiếu.</li>
         <li>Ghi một lỗi đã sửa, một quyết định tự làm trước gợi ý, và ba ca chưa chắc hoặc đã cân nhắc.</li>
-        <li>Nộp theo kênh lớp thông báo. Nếu lỗi export, ghi task và báo coach trước khi hết giờ.</li>
+        <li>Nộp theo kênh lớp thông báo. Nếu chỉ nhận một file, xem <a href="docs/SUBMISSION.md">cách đóng một gói</a>. Nếu lỗi export, ghi task và báo coach trước khi hết giờ.</li>
       </ol>
       <p class="note">Điểm tối đa là 100 trong lớp. IoU giữa hai mask chỉ là độ giống nhau. Người chấm giữ reference riêng và trả feedback; bạn không phải đoán điểm hoặc làm ở nhà để bù.</p>
     </section>
