@@ -96,7 +96,7 @@ Mở [`REPORT.md`](REPORT.md) ở gốc fork rồi điền; [mẫu có ví dụ]
 
 ### Notebook và lệnh tự kiểm — tùy chọn
 
-[Năm notebook](notebooks/README.md) dẫn từ nhận ảnh đến nộp: xem ảnh, mask semantic, số mask instance, panoptic và tình trạng ZIP. Chúng **không thêm task**, không bắt bạn viết code và không cần để nhận điểm. Nếu máy có Python 3, đặt ZIP vào `submissions/<mã_task>.zip` rồi chạy từ thư mục repo:
+[Một notebook dùng được trên Colab](notebooks/day5-segmentation-tu-kiem.ipynb) dẫn từ nhận ảnh đến nộp: xem ảnh, mask semantic, số mask instance, panoptic và tình trạng ZIP. Nó **không thêm task**, không bắt bạn viết code và không cần để nhận điểm. [Cách upload notebook lên Colab và nhập link fork](notebooks/README.md) có từng bước; bạn không cần upload cả repo. Nếu máy có Python 3, đặt ZIP vào `submissions/<mã_task>.zip` rồi chạy từ thư mục repo:
 
 ```bash
 python3 scripts/inspect_submissions.py --dir submissions

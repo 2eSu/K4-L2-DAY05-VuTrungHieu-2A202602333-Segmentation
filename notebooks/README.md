@@ -1,15 +1,14 @@
-# Notebook Day 5 — trợ lý tự kiểm, không phải bài mới
+# Notebook Day 5 — một file cho Colab hoặc Jupyter
 
-Lộ trình vẫn là 9 task của starter, 14 ảnh và 100 điểm trong 240 phút. Notebook không thêm bài, không mở đáp án, không bắt bạn viết code. Nếu mới dùng máy tính, cứ theo `lab-guide.html` và CVAT; coach có thể dùng notebook để hỗ trợ kiểm export.
+Lộ trình vẫn là 9 task, 14 ảnh và 100 điểm trong 240 phút. [Mở một notebook duy nhất](day5-segmentation-tu-kiem.ipynb) để đi từ nhận ảnh → QC semantic → QC instance → QC panoptic → kiểm nộp. Notebook không thêm bài, không mở đáp án, không bắt bạn viết code. Nếu mới dùng máy tính, cứ theo `lab-guide.html` và CVAT; coach có thể dùng notebook để hỗ trợ kiểm export.
 
-| Mở khi nào | Notebook | Kết quả nhìn thấy |
-| --- | --- | --- |
-| Trước khi vào CVAT | `01-bat-dau-va-nhan-anh.ipynb` | Tên ảnh, class, điểm và ảnh thật của task |
-| Sau Easy / semantic checkpoint | `02-qc-semantic.ipynb` | Đủ mask ảnh, labelmap và xem một PNG |
-| Sau Medium / instance checkpoint | `03-qc-instance.ipynb` | Ảnh, class, số mask từng ảnh và polygon/RLE |
-| Sau Hard | `04-qc-panoptic.ipynb` | Stuff/thing đã xuất và câu hỏi tự QC |
-| Trước khi nộp | `05-kiem-tra-va-nop.ipynb` | Tình trạng 9 ZIP, gói nộp tùy chọn |
+## Dùng trên Google Colab
 
-Mở từ gốc repo bằng JupyterLab/VS Code, hoặc từ thư mục `notebooks/`; chạy ô từ trên xuống bằng Shift+Enter. Môi trường notebook cần Python 3 và Jupyter/IPython; công cụ CLI `scripts/inspect_submissions.py` chỉ cần Python 3 chuẩn. Không cần notebook để nhận điểm. Nếu mở trong Colab, bạn phải đưa đầy đủ repo và export của **chính mình** vào cùng workspace; không upload tài liệu có thông tin cá nhân lên dịch vụ ngoài nếu quy định lớp không cho phép.
+1. Nếu đang xem `lab-guide.html` trên máy, bấm **Tải một file notebook**. Nếu đang xem GitHub, mở `day5-segmentation-tu-kiem.ipynb` rồi bấm **Download raw file**. Vào Google Colab → **File → Upload notebook** và chọn file vừa tải.
+2. Ở ô code đầu, dán URL **fork của bạn** vào `FORK_URL = "..."` rồi chạy. Notebook tự tải ảnh, manifest và script tự kiểm từ fork công khai. Không cần upload cả repo. Nếu fork chưa public hoặc Colab không truy cập được GitHub, dùng Jupyter trên bản repo đã tải về máy.
+3. Nếu ZIP CVAT đã push vào `submissions/` trên fork, chạy tiếp. Nếu chưa push, ở ô upload đổi `UPLOAD_ZIPS = True`, chọn các ZIP tên đúng mã task rồi tiếp tục. File upload chỉ nằm tạm trong phiên Colab: **vẫn phải đưa ZIP và report lên fork để nộp**.
+4. Chạy các ô theo thứ tự. Mỗi phần chỉ kiểm cấu trúc hoặc hiện số mask đã nộp; xem lại CVAT bằng mắt để sửa. Cuối cùng nộp **link fork trên VLearn**, không nộp notebook hay ZIP Colab.
+
+Nếu dùng JupyterLab/VS Code trên máy, mở notebook từ gốc repo hoặc thư mục `notebooks/`, chạy từ trên xuống bằng Shift+Enter; không cần điền `FORK_URL`. Môi trường notebook cần Python 3 và Jupyter/IPython; công cụ CLI `scripts/inspect_submissions.py` chỉ cần Python 3 chuẩn. Không cần notebook để nhận điểm. Không đưa dữ liệu cá nhân hoặc dữ liệu không được phép lên dịch vụ ngoài.
 
 Không notebook nào tính IoU hoặc điểm khi chưa có reference. Thiếu/thừa object không thể xác định chỉ từ file của bạn: con số được in ra là **số object đã nộp**, để bạn kiểm lại bằng mắt. Nếu bạn so hai export, `annotation_id` trong COCO không phải định danh ổn định và IoU chỉ là độ giống nhau, không phải correctness.

@@ -34,4 +34,4 @@ Mỗi checkpoint là một ảnh và **3 điểm**: `cp1_holes` (lỗ/kính), `c
 
 ## Tự QC rồi nộp
 
-Theo thứ tự: đúng ảnh → đúng loại segmentation → đúng tên lớp → đủ số object/vùng → biên → Save → ZIP đúng format. Một lỗi thực tế và cách sửa phải xuất hiện trong `REPORT.md`. [Năm notebook tự kiểm](notebooks/README.md) và [lệnh kiểm ZIP](docs/SUBMISSION.md) là tùy chọn nếu có Python; người mới vẫn upload được export + report lên fork bằng giao diện GitHub. Bạn không cần tự chạy scorer hoặc đoán điểm.
+Theo thứ tự: đúng ảnh → đúng loại segmentation → đúng tên lớp → đủ số object/vùng → biên → Save → ZIP đúng format. Một lỗi thực tế và cách sửa phải xuất hiện trong `REPORT.md`. [Một notebook tự kiểm cho Colab](notebooks/README.md) và [lệnh kiểm ZIP](docs/SUBMISSION.md) là tùy chọn nếu có Python; người mới vẫn upload được export + report lên fork bằng giao diện GitHub. Bạn không cần tự chạy scorer hoặc đoán điểm.
