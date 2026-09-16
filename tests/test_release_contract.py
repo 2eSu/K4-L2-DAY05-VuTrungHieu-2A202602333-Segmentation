@@ -61,6 +61,18 @@ class ReleaseContract(unittest.TestCase):
         for reference in parser.references:
             self.assertTrue((ROOT / reference).is_file(), reference)
 
+    def test_cvat_screenshot_extensions_match_image_data(self):
+        screenshots = list((ROOT / "docs" / "images").iterdir())
+        self.assertTrue(screenshots)
+        for path in screenshots:
+            signature = path.read_bytes()[:8]
+            if path.suffix == ".png":
+                self.assertEqual(signature, b"\x89PNG\r\n\x1a\n", path.name)
+            elif path.suffix == ".jpg":
+                self.assertTrue(signature.startswith(b"\xff\xd8\xff"), path.name)
+            else:
+                self.fail(f"Unexpected screenshot type: {path.name}")
+
     def test_report_uses_same_score_weights(self):
         report = (ROOT / "reports" / "REPORT_TEMPLATE.md").read_text()
         for row in ("| easy_semantic |", "| medium_instance |", "| hard_panoptic |"):
