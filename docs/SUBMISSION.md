@@ -1,6 +1,6 @@
-# Nộp bài Day 5 — một đường dễ kiểm
+# Nộp bài Day 5 — fork → push → VLearn
 
-Bạn làm trên CVAT local trước; notebook và lệnh dưới đây chỉ là cách tự kiểm tùy chọn. Thời gian chấm chỉ tính 240 phút trên lớp. Nếu máy không có Python, nộp trực tiếp các ZIP CVAT và `REPORT.md` theo kênh lớp thông báo; coach sẽ kiểm cấu trúc.
+Repo đề bài mở public. Bạn **fork về tài khoản GitHub của mình**, làm bài với CVAT local, đưa bài lên fork và nộp **link fork trên VLearn trong vòng 24 giờ sau buổi lab**. Tool chấm riêng chạy sau cửa sổ nộp. Lab thực hành 240 phút trên lớp; không có bài tập về nhà hoặc điểm cộng riêng. Notebook và các lệnh dưới đây chỉ để tự kiểm tùy chọn, không phải điều kiện nộp.
 
 ## 1. Xuất đúng format và đặt tên
 
@@ -12,11 +12,11 @@ Bạn làm trên CVAT local trước; notebook và lệnh dưới đây chỉ l�
 | `cp1_holes`, `cp2_slice`, `cp5_occlusion` | COCO 1.0 | `<mã_task>.zip` |
 | `cp3_thin`, `cp4_curb`, `cp6_coverage` | Segmentation mask 1.1 | `<mã_task>.zip` |
 
-Đặt tất cả ở `submissions/` trong repo. Giữ nguyên nội dung bên trong mỗi ZIP. Nếu chưa xong trạm nào, không tạo ZIP rỗng; ghi rõ vào report.
+Đặt tất cả ở `submissions/` trong **fork của bạn**. Giữ nguyên nội dung bên trong mỗi ZIP. Nếu chưa xong trạm nào, không tạo ZIP rỗng; ghi rõ vào report.
 
 ## 2. Điền một report
 
-Sao chép `reports/REPORT_TEMPLATE.md` thành `REPORT.md` ở gốc repo và điền mã học viên, task hoàn thành, một quyết định tự vẽ trước gợi ý, một lỗi đã sửa và ba ca cân nhắc. Không tự điền điểm. Nếu export thất bại, ghi tên task, trạng thái đã Save trên CVAT và báo coach.
+Sao chép `reports/REPORT_TEMPLATE.md` thành `REPORT.md` ở gốc fork và điền mã học viên, task hoàn thành, một quyết định tự vẽ trước gợi ý, một lỗi đã sửa và ba ca cân nhắc. Không tự điền điểm. Nếu export thất bại, ghi tên task, trạng thái đã Save trên CVAT và báo coach.
 
 ## 3. Tự kiểm tùy chọn
 
@@ -28,12 +28,16 @@ python3 scripts/inspect_submissions.py --dir submissions
 
 `OK` chỉ có nghĩa ZIP đọc được và khớp hợp đồng ảnh/class/mask. `THIẾU` nghĩa chưa có ZIP; đó không phải lỗi kỹ thuật. `LỖI` cần sửa trong CVAT, Save và export lại. Với COCO, dòng `annotations` là số mask đã nộp, **không phải số object đúng**. Với panoptic, phải tự xem lại phủ vùng/chồng lấn trong CVAT. Bạn cũng có thể mở năm notebook trong `notebooks/` nếu đã có Jupyter.
 
-## 4. Đóng một gói nếu kênh nộp yêu cầu
+## 4. Đưa bài lên fork và nộp link
+
+Không cần dòng lệnh Git: mở fork trên GitHub → **Add file → Upload files** → đưa `REPORT.md` lên thư mục gốc; mở/tạo `submissions/` trong fork và upload từng ZIP đúng tên → bấm **Commit changes**. Mở lại fork, kiểm `REPORT.md` và các ZIP đã hiện, rồi dán **URL của fork cá nhân** vào bài nộp Day 5 trên VLearn. Đừng dán URL repo đề bài của lớp. Nếu dùng Git trên máy, commit và push các file tương tự; kết quả trên fork phải giống nhau.
+
+Lệnh đóng thêm một ZIP duy nhất dưới đây là **tùy chọn để lưu/chuyển**, không thay cho `REPORT.md` và các ZIP riêng trên fork:
 
 ```bash
 python3 scripts/package_submission.py --learner-id D5_012
 ```
 
-Lệnh lấy các ZIP ở `submissions/`, tạo `day5-D5_012.zip` gồm `REPORT.md`, các ZIP trong thư mục `exports/` **bên trong gói cuối**, và `manifest.json` có SHA-256. Gói vẫn cho phép task chưa kịp, nhưng report phải giải thích. Không nộp cả thư mục repo, ảnh gốc, file reference hay file tạm notebook.
+Lệnh lấy các ZIP ở `submissions/`, tạo `day5-D5_012.zip` gồm `REPORT.md`, các ZIP trong thư mục `exports/` **bên trong gói cuối**, và `manifest.json` có SHA-256. Gói vẫn cho phép task chưa kịp, nhưng report phải giải thích. Không upload thêm bản sao ảnh gốc, file reference hay file tạm notebook lên fork.
 
-Nếu kênh nhận nhiều file, có thể nộp `REPORT.md` cùng từng ZIP đúng tên mà không chạy lệnh. Nếu kênh nhận một file nhưng bạn không có Python, nén thủ công `REPORT.md` và các ZIP export thành một ZIP, đặt tên `day5-<mã_học_viên>.zip`; không cần tự tạo checksum. Coach chấm cùng một rubric 100 điểm, không ưu tiên cách đóng gói bằng code.
+Tool chấm của lớp hoạt động riêng sau hạn 24 giờ; lệnh tự kiểm ZIP chỉ báo cấu trúc, không báo điểm. Làm bài qua nút Upload files và làm bằng Git đều theo cùng một rubric 100 điểm.

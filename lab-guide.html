@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Hướng dẫn trực quan Day 5 Segmentation: 14 ảnh, 9 task, thao tác CVAT local từng bước, tự kiểm và nộp bài trong 240 phút.">
+  <meta name="description" content="Hướng dẫn trực quan Day 5 Segmentation: 14 ảnh, 9 task, CVAT local từng bước; fork, push và nộp link trên VLearn trong 24 giờ.">
   <title>Day 5 | Segmentation Field Guide</title>
   <style>
     :root {
@@ -225,7 +225,7 @@
   <main id="main">
     <div class="hero" id="top">
       <div>
-        <p class="eyebrow">Day 5 · 240 phút trên lớp</p>
+        <p class="eyebrow">Day 5 · 240 phút trên lớp · nộp link trong 24 giờ</p>
         <h1>Nhìn thấy gì.<br><span>Vẽ đúng phần đó.</span></h1>
         <p class="lead">Ba loại segmentation, sáu ca khó, một kỹ năng chung: tự quyết định ranh giới, phát hiện lỗi và giải thích cách sửa.</p>
         <div class="hero-linkrow"><a class="action" href="#start">Bắt đầu từ đây</a><a class="action secondary" href="#cvat">Xem CVAT từng bước</a></div>
@@ -245,13 +245,14 @@
     </section>
 
     <section id="start" aria-labelledby="start-title">
-      <div class="section-head"><h2 id="start-title">Bắt đầu trong 5 phút</h2><p>Không cần Python hoặc notebook. Mọi người làm cùng bộ task và cùng thang 100 điểm; người mới dùng ảnh hướng dẫn, người quen CVAT có thể đi nhanh hơn.</p></div>
+      <div class="section-head"><h2 id="start-title">Bắt đầu trong 5 phút</h2><p>Không cần Python hoặc notebook. Mọi người fork cùng một repo đề bài, làm cùng bộ task và cùng thang 100 điểm; người mới dùng ảnh hướng dẫn, người quen CVAT có thể đi nhanh hơn.</p></div>
       <div class="readiness"><div class="check-panel"><h3>Kiểm trước khi vẽ</h3>
+        <label><input type="checkbox" data-check><span><strong>Tôi đã fork repo đề bài vào GitHub của mình.</strong><small>Mở fork của chính bạn; sau này push bài lên đây và nộp link trên VLearn.</small></span></label>
         <label><input type="checkbox" data-check><span><strong>Tôi vào được CVAT local của lớp.</strong><small>Nếu lỗi đăng nhập hoặc địa chỉ, chụp màn hình và báo coach.</small></span></label>
         <label><input type="checkbox" data-check><span><strong>Tôi mở đúng task và đúng số ảnh.</strong><small>Bắt đầu với <code>easy_semantic</code>, ba JPG trong thư mục của task.</small></span></label>
         <label><input type="checkbox" data-check><span><strong>Tôi đã đọc classes.json của task.</strong><small>Tên lớp phải trùng từng chữ, kể cả dấu cách.</small></span></label>
         <label><input type="checkbox" data-check><span><strong>Tôi biết Save và export nằm ở đâu.</strong><small>Nhìn ảnh chụp phía dưới; nếu vẫn không thấy, hỏi coach trước khi làm nhiều ảnh.</small></span></label>
-        <div class="progress">Đã sẵn sàng: <span data-progress-label>0/4</span><span class="progress-track"><i data-progress-bar></i></span></div>
+        <div class="progress">Đã sẵn sàng: <span data-progress-label>0/5</span><span class="progress-track"><i data-progress-bar></i></span></div>
       </div><aside class="rule-card"><h3>Một quy tắc cho cả lớp</h3><p>Trước khi xem bất kỳ gợi ý tự động nào ở Medium, tự vẽ một object và ghi lại vì sao bạn chọn class, đường biên đó.</p><p>Không thấy SAM thì dùng Brush/Polygon. Việc này không làm mất khả năng hoàn thành bài.</p><a href="guideline-mini-sheet.md">Mở phiếu quy tắc ngắn</a></aside></div>
     </section>
 
@@ -339,7 +340,7 @@
     </section>
 
     <section id="schedule" aria-labelledby="schedule-title">
-      <div class="section-head"><h2 id="schedule-title">240 phút, có điểm dừng rõ</h2><p>Giữ hai lần nghỉ, thời gian tự QC và nộp. Đây là timebox để bạn không mắc kẹt ở một mask; nếu chưa xong, nộp phần đã làm và ghi đúng tình trạng.</p></div>
+      <div class="section-head"><h2 id="schedule-title">240 phút, có điểm dừng rõ</h2><p>Giữ hai lần nghỉ và thời gian tự QC. Đây là timebox thực hành, không phải hạn nộp ngay trong lớp; nếu chưa xong, ghi đúng phần đã làm và phần còn thiếu.</p></div>
       <div class="timeline">
         <div class="block"><strong>0–15</strong><h3>Mở môi trường</h3><p>Vào CVAT, đọc quy tắc, tạo hoặc tìm Easy; kiểm ba ảnh và năm class.</p></div>
         <div class="block"><strong>15–45</strong><h3>Easy semantic</h3><p>Tô vùng, so ranh road/sidewalk, Save và export.</p></div>
@@ -348,7 +349,7 @@
         <div class="block"><strong>120–175</strong><h3>Hard panoptic</h3><p>Vẽ stuff và từng thing trên hai ảnh, kiểm rồi export.</p></div>
         <div class="block"><strong>175–185</strong><h3>Nghỉ</h3><p>Chuẩn bị cho sáu ca ngắn.</p></div>
         <div class="block"><strong>185–215</strong><h3>Sáu checkpoint</h3><p>Mỗi task một ảnh, dùng đúng classes.json riêng.</p></div>
-        <div class="block"><strong>215–240</strong><h3>QC, report, nộp</h3><p>Kiểm ZIP, điền report, nộp qua kênh lớp trước khi kết thúc.</p></div>
+        <div class="block"><strong>215–240</strong><h3>QC, report, chuẩn bị push</h3><p>Kiểm ZIP, điền report, Save lần cuối và ghi lỗi cần báo coach. Nộp link fork trên VLearn trong 24 giờ sau buổi lab.</p></div>
       </div>
     </section>
 
@@ -376,14 +377,14 @@
     </section>
 
     <section id="submit" aria-labelledby="submit-title">
-      <div class="section-head"><h2 id="submit-title">Nộp bài để người khác hiểu được</h2><p>Coach nhận các ZIP export và một report theo cùng mẫu. Không cần cài Python hoặc tự chấm khi repo không có ground truth.</p></div>
+      <div class="section-head"><h2 id="submit-title">Fork → push → nộp link</h2><p>Repo đề bài là public. Mỗi bạn nộp link fork cá nhân trên VLearn trong vòng 24 giờ sau buổi lab; tool riêng chấm sau cửa sổ nộp. Không cần Python hoặc tự chấm.</p></div>
       <ol class="list">
-        <li>Kiểm file ZIP tên đúng mã task, mở được, và có dữ liệu xuất từ CVAT.</li>
-        <li>Sao chép mẫu <a href="reports/REPORT_TEMPLATE.md">REPORT_TEMPLATE.md</a> thành <code>REPORT.md</code>. Mẫu có giải thích từng ô và ví dụ cho người mới; giữ nguyên bốn mục, điền bài đã làm và phần còn thiếu.</li>
-        <li>Ghi một lỗi đã sửa, một quyết định tự làm trước gợi ý, và ba ca chưa chắc hoặc đã cân nhắc.</li>
-        <li>Nộp theo kênh lớp thông báo. Nếu chỉ nhận một file, xem <a href="docs/SUBMISSION.md">cách đóng một gói</a>. Nếu lỗi export, ghi task và báo coach trước khi hết giờ.</li>
+        <li>Trên GitHub, bấm <strong>Fork</strong> ở repo đề bài để tạo fork trên tài khoản của bạn. Dùng ảnh và class trong fork để làm bài trên CVAT.</li>
+        <li>Kiểm ZIP export: tên đúng mã task, mở được và có dữ liệu. Sao chép <a href="reports/REPORT_TEMPLATE.md">mẫu report</a> thành <code>REPORT.md</code>; ghi một quyết định tự làm, một lỗi và ba ca cân nhắc.</li>
+        <li>Trong fork, dùng <strong>Add file → Upload files</strong> để đưa <code>REPORT.md</code> vào gốc và ZIP vào <code>submissions/</code>; bấm <strong>Commit changes</strong>. Dùng Git trên máy để push cũng được, nhưng không bắt buộc.</li>
+        <li>Mở lại fork, kiểm file đã hiện rồi dán <strong>link fork của bạn</strong> vào VLearn trong vòng 24 giờ sau buổi lab. Đừng dán link repo đề bài của lớp. Nếu export lỗi, ghi tình trạng Save và báo coach. <a href="docs/SUBMISSION.md">Xem cách nộp chi tiết</a>.</li>
       </ol>
-      <p class="note">Điểm tối đa là 100 trong lớp. IoU giữa hai mask chỉ là độ giống nhau. Người chấm giữ reference riêng và trả feedback; bạn không phải đoán điểm hoặc làm ở nhà để bù.</p>
+      <p class="note">Điểm tối đa là 100. Hạn 24 giờ chỉ là cửa sổ nhận bài, không có bài tập về nhà hoặc điểm cộng riêng. IoU giữa hai mask chỉ là độ giống nhau; bạn không phải tự đoán điểm.</p>
     </section>
     <section id="glossary" aria-labelledby="glossary-title">
       <div class="section-head"><h2 id="glossary-title">Sáu từ đủ để bắt đầu</h2><p>Không cần thuộc định nghĩa trước khi vào CVAT. Quay lại đây khi gặp một từ lạ trong task hoặc report.</p></div>
@@ -400,7 +401,7 @@
       const checks = [...document.querySelectorAll('[data-check]')];
       const progress = document.querySelector('[data-progress-label]');
       const bar = document.querySelector('[data-progress-bar]');
-      const key = 'day5-student-preflight-v1';
+      const key = 'day5-student-preflight-v2';
       try {
         const saved = JSON.parse(localStorage.getItem(key) || '[]');
         checks.forEach((box, index) => { box.checked = Boolean(saved[index]); });

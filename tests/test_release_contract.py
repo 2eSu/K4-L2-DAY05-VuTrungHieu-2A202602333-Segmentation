@@ -99,6 +99,17 @@ class ReleaseContract(unittest.TestCase):
         self.assertIn("data-lightbox", guide)
         self.assertIn("data-progress-label", guide)
 
+    def test_fork_submission_route_is_consistent(self):
+        for name in ("README.md", "GUIDE.md", "RUBRIC.md", "docs/SUBMISSION.md", "lab-guide.html"):
+            content = (ROOT / name).read_text()
+            self.assertIn("24 giờ", content, name)
+            self.assertIn("VLearn", content, name)
+        self.assertTrue((ROOT / "submissions" / ".gitkeep").is_file())
+        ignore = (ROOT / ".gitignore").read_text()
+        self.assertNotIn("submissions/", ignore)
+        self.assertNotIn("REPORT.md", ignore)
+        self.assertNotIn("*.zip", ignore.replace("/*.zip", ""))
+
     def test_five_notebooks_are_valid_and_compile(self):
         notebooks = sorted((ROOT / "notebooks").glob("*.ipynb"))
         self.assertEqual(len(notebooks), 5)

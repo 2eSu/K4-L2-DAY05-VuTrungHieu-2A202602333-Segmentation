@@ -12,9 +12,9 @@
 | 175–185 | Nghỉ | |
 | 185–215 | Sáu checkpoint theo thứ tự trong `data/manifest.json` | ZIP trạm đã làm |
 | 215–235 | Kiểm export, ghi lỗi, hành động sửa và ba ca chưa chắc vào report | `REPORT.md` |
-| 235–240 | Nộp một gói bài theo kênh lớp | Danh sách file đã nhận |
+| 235–240 | Save lần cuối, kiểm ZIP và report, ghi lỗi cần báo coach | Bài sẵn để push lên fork |
 
-Các mốc là **timebox**, không phải lý do bỏ qua Save/QC. Nếu không đủ giờ, ghi phần đã hoàn thành và phần còn thiếu trung thực; tối đa vẫn là 100 trong lớp, không có bài về nhà để bù.
+Các mốc là **timebox thực hành**, không phải hạn nộp ngay trong lớp hay lý do bỏ qua Save/QC. Fork repo đề bài public, push `REPORT.md` và các ZIP đã làm lên fork của bạn, rồi nộp **link fork trên VLearn trong vòng 24 giờ sau buổi lab**. Công cụ chấm riêng chạy sau cửa sổ nộp. Nếu không đủ giờ, ghi phần đã hoàn thành và phần còn thiếu trung thực; không có bài tập về nhà hoặc điểm cộng riêng.
 
 ## Easy: semantic — 20 điểm
 
@@ -34,4 +34,4 @@ Mỗi checkpoint là một ảnh và **3 điểm**: `cp1_holes` (lỗ/kính), `c
 
 ## Tự QC rồi nộp
 
-Theo thứ tự: đúng ảnh → đúng loại segmentation → đúng tên lớp → đủ số object/vùng → biên → Save → ZIP đúng format. Một lỗi thực tế và cách sửa phải xuất hiện trong `REPORT.md`. [Năm notebook tự kiểm](notebooks/README.md) và [lệnh kiểm ZIP](docs/SUBMISSION.md) là tùy chọn nếu có Python; người mới vẫn nộp trực tiếp export + report. Người chấm đối chiếu với reference giữ riêng; bạn không cần tự chạy scorer hoặc đoán điểm.
+Theo thứ tự: đúng ảnh → đúng loại segmentation → đúng tên lớp → đủ số object/vùng → biên → Save → ZIP đúng format. Một lỗi thực tế và cách sửa phải xuất hiện trong `REPORT.md`. [Năm notebook tự kiểm](notebooks/README.md) và [lệnh kiểm ZIP](docs/SUBMISSION.md) là tùy chọn nếu có Python; người mới vẫn upload được export + report lên fork bằng giao diện GitHub. Bạn không cần tự chạy scorer hoặc đoán điểm.

@@ -1,16 +1,16 @@
 # Day 5 — Segmentation Data Lab
 
-**Dành cho học viên · 240 phút trên lớp · tối đa 100 điểm.** Đây là một bài lab chung cho cả lớp, không có bài bắt buộc về nhà hoặc điểm cộng. Bài giữ nguyên cấu trúc, ảnh, lớp và trọng số của [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) tại commit `3bff13d`: Easy semantic → Medium instance → Hard panoptic → sáu checkpoint. Repo này bổ sung hướng dẫn CVAT local, tự kiểm và cách nộp, **không thay bài starter bằng bộ ảnh pilot khác**.
+**Dành cho học viên · 240 phút thực hành trên lớp · tối đa 100 điểm.** Repo đề bài mở công khai; mỗi học viên **fork repo này**, làm bài trong fork của mình, push kết quả rồi nộp link fork trên VLearn trong vòng 24 giờ sau buổi lab. Bài được chấm bằng công cụ riêng sau cửa sổ nộp. Không có bài tập về nhà hoặc điểm cộng riêng. Bài giữ nguyên cấu trúc, ảnh, lớp và trọng số của [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) tại commit `3bff13d`: Easy semantic → Medium instance → Hard panoptic → sáu checkpoint. Repo này bổ sung hướng dẫn CVAT local, tự kiểm và cách nộp, **không thay bài starter bằng bộ ảnh pilot khác**.
 
-Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, sửa một lỗi và giải thích quyết định của mình. Bằng chứng cuối giờ là **ZIP export từ CVAT cho các task đã làm và một `REPORT.md`**. Có thể hoàn thành toàn bộ mà không cần lập trình, Jupyter hay SAM. [Hướng dẫn trực quan có ảnh chụp CVAT](lab-guide.html) dành cho người mới; README này là lộ trình đầy đủ để tra cứu trong lúc làm. Nếu xem trên GitHub không mở được HTML, tải repo và mở file đó trong Chrome/Edge.
+Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, sửa một lỗi và giải thích quyết định của mình. Bằng chứng cần nộp là **ZIP export từ CVAT cho các task đã làm và một `REPORT.md`** trong fork của bạn. Có thể hoàn thành toàn bộ mà không cần lập trình, Jupyter hay SAM. [Hướng dẫn trực quan có ảnh chụp CVAT](lab-guide.html) dành cho người mới; README này là lộ trình đầy đủ để tra cứu trong lúc làm. Nếu xem trên GitHub không mở được HTML, tải fork về và mở file đó trong Chrome/Edge.
 
 ## Bắt đầu trong 5 phút
 
-1. Tải hoặc clone repo về máy và giải nén nếu tải ZIP. Mở `lab-guide.html` để xem ảnh chụp giao diện. Không cần cài notebook để bắt đầu.
+1. Đăng nhập GitHub, bấm **Fork** ở repo đề bài và chọn tài khoản của bạn. Tải fork về máy (Download ZIP hoặc clone), giải nén nếu cần; mở `lab-guide.html` để xem ảnh chụp giao diện. Không cần cài notebook để bắt đầu.
 2. Mở **CVAT local của lớp** theo địa chỉ coach cung cấp. Nếu CVAT chạy trên chính máy bạn, địa chỉ thường là `http://localhost:8080`; nếu không mở được, báo coach với ảnh màn hình lỗi. Đừng tự cài một CVAT khác giữa giờ.
 3. Đọc [phiếu quy tắc](guideline-mini-sheet.md). Tạo task đầu tiên tên `easy_semantic`, tải đúng ba ảnh trong [`data/tiers/easy_semantic/images/`](data/tiers/easy_semantic/images/) và thêm từng label từ [`classes.json`](data/tiers/easy_semantic/classes.json).
 4. Vẽ mask, kiểm class và vùng, bấm **Save**, xuất **Segmentation mask 1.1**, lưu thành `easy_semantic.zip`. Các task tiếp theo có bộ ảnh và `classes.json` riêng.
-5. Trước khi nộp, sao chép [`reports/REPORT_TEMPLATE.md`](reports/REPORT_TEMPLATE.md) thành `REPORT.md` và điền thật. Nếu không kịp task nào, ghi phần đã làm và phần còn thiếu; không tạo export rỗng.
+5. Trước khi nộp, sao chép [`reports/REPORT_TEMPLATE.md`](reports/REPORT_TEMPLATE.md) thành `REPORT.md` và điền thật. Push/upload report cùng các ZIP lên fork rồi nộp link fork trên VLearn. Nếu không kịp task nào, ghi phần đã làm và phần còn thiếu; không tạo export rỗng.
 
 > **Ảnh trong screenshot CVAT chỉ để tìm nút, không phải ảnh chấm.** Ảnh chấm nằm trong `data/` của repo này. Tên class phải giống từng chữ trong `classes.json` của chính task đang làm.
 
@@ -45,7 +45,7 @@ Checkpoint có **class list riêng**. Ví dụ `cp3_thin` có `pole`, `traffic s
 
 ## Lộ trình 240 phút trên lớp
 
-Đây là **timebox để còn giờ Save, tự QC và nộp**. Nếu chậm hơn dự kiến, nộp phần làm được và ghi rõ phần còn thiếu; không làm tiếp ở nhà để bù điểm. [Bản lộ trình văn bản](GUIDE.md) có thể mở cạnh CVAT.
+Đây là **timebox cho 240 phút thực hành**, để còn giờ Save, tự QC và chuẩn bị bài nộp. Nếu chậm hơn dự kiến, ghi rõ phần đã làm và phần còn thiếu. Hạn đưa link fork lên VLearn là **24 giờ sau buổi lab**; công cụ chấm riêng chạy sau cửa sổ nộp. [Bản lộ trình văn bản](GUIDE.md) có thể mở cạnh CVAT.
 
 | Phút | Việc chính | Bằng chứng giữ lại |
 | ---: | --- | --- |
@@ -57,7 +57,7 @@ Checkpoint có **class list riêng**. Ví dụ `cp3_thin` có `pole`, `traffic s
 | 175–185 | Nghỉ | Chuẩn bị checkpoint |
 | 185–215 | Sáu checkpoint theo thứ tự trong manifest | ZIP của các trạm hoàn thành |
 | 215–235 | Kiểm file, sửa và export lại nếu cần; điền report | `REPORT.md`: lỗi, hành động, ba ca cân nhắc |
-| 235–240 | Nộp theo kênh lớp thông báo | File đã nhận hoặc thông báo lỗi gửi coach |
+| 235–240 | Save lần cuối, kiểm danh sách ZIP/report, ghi lỗi cần báo coach | Bài sẵn để đưa lên fork |
 
 ## CVAT local: làm từng bước, không cần code
 
@@ -104,19 +104,19 @@ python3 scripts/inspect_submissions.py --dir submissions
 
 Lệnh không cần thư viện ngoài; nó kiểm tên ảnh, class, cấu trúc `Segmentation mask 1.1`/`COCO 1.0` và dạng polygon/RLE. **Nó không đọc reference, không biết số object đúng, không kiểm biên đúng và không tính điểm.** `OK` là cấu trúc phù hợp; `THIẾU` là chưa có ZIP; `LỖI` cần xem và export lại trong CVAT. Số `annotations` ở COCO chỉ là số mask *bạn đã nộp*. Người không có Python cứ tự kiểm bằng CVAT và nộp trực tiếp.
 
-## Nộp một lần cuối giờ
+## Fork → làm bài → push → nộp link trong vòng 24 giờ
 
-Nộp theo kênh lớp thông báo: `REPORT.md` và ZIP export CVAT đã làm, mỗi ZIP đặt đúng tên task (ví dụ `easy_semantic.zip`, `cp2_slice.zip`). Nếu kênh nhận nhiều file, gửi các file đó trực tiếp. Nếu chỉ nhận một file, nén report cùng các ZIP thành `day5-<mã_học_viên>.zip`; **cách nén thủ công hợp lệ như nhau**. Với Python 3, có thể đóng gói và ghi checksum bằng:
+Từ repo đề bài public, bấm **Fork** để có bản trên tài khoản GitHub của bạn. Làm bài với bộ ảnh trong fork; khi xuất từ CVAT, đưa `REPORT.md` vào gốc fork và các ZIP vào `submissions/` (ví dụ `submissions/easy_semantic.zip`, `submissions/cp2_slice.zip`). Dùng **Add file → Upload files** trên GitHub hoặc Git để push thay đổi, mở lại fork để chắc file đã hiện, rồi **dán link fork trên VLearn trong vòng 24 giờ sau buổi lab**. Không cần chạy Git bằng lệnh nếu bạn dùng nút Upload files. Nếu muốn có thêm một gói lưu/chuyển, lệnh sau là tùy chọn:
 
 ```bash
 python3 scripts/package_submission.py --learner-id D5_012
 ```
 
-[Hướng dẫn nộp](docs/SUBMISSION.md) ghi format và tên từng ZIP, cách xử lý lỗi. **Không nộp cả repo, ảnh gốc, file tạm notebook hoặc đáp án.** Nếu export lỗi sát giờ, báo coach và ghi trạng thái đã Save trong report; không tạo ZIP rỗng. Nộp phần làm được trong 240 phút, không làm ở nhà để bù.
+[Hướng dẫn nộp](docs/SUBMISSION.md) ghi format, tên từng ZIP và cách đưa bài lên GitHub/VLearn không cần code. **Không upload thêm bản sao ảnh gốc, file tạm notebook hoặc đáp án vào fork.** Nếu export lỗi, báo coach và ghi trạng thái đã Save trong report; không tạo ZIP rỗng. Hạn 24 giờ là cửa sổ nhận bài, không phải một bài tập hoặc thang điểm mới.
 
 ## Mã nguồn starter có ngay trong repo này
 
-Mã xử lý mask và tính metric từ starter nằm ở [`lab_utils.py`](lab_utils.py); hai lệnh chấm một task và lập scorecard nằm ở [`scoring/score.py`](scoring/score.py) và [`scoring/scorecard.py`](scoring/scorecard.py). Như vậy ai muốn đọc cách tính điểm không cần chuyển sang repo khác. **Học viên không phải chạy các lệnh chấm để hoàn thành bài.**
+Mã xử lý mask và tính metric từ starter nằm ở [`lab_utils.py`](lab_utils.py); hai lệnh tham khảo chấm một task và lập scorecard nằm ở [`scoring/score.py`](scoring/score.py) và [`scoring/scorecard.py`](scoring/scorecard.py). Công cụ chấm chính thức của lớp được vận hành riêng **sau cửa sổ nộp 24 giờ**. **Học viên không phải chạy các lệnh chấm để hoàn thành bài.**
 
 Các lệnh chấm cần reference được giữ riêng và ba thư viện trong [`requirements.txt`](requirements.txt). Repo này chỉ có ảnh đầu vào, không có reference nên chạy chấm tại đây sẽ báo thiếu reference, **không tạo điểm 0**. Mã chuẩn bị/tạo reference không được phát cùng repo học viên. Lệnh [`scripts/inspect_submissions.py`](scripts/inspect_submissions.py) ở trên vẫn là cách tự kiểm ZIP không cần reference hay thư viện ngoài.
 

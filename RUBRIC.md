@@ -1,6 +1,6 @@
 # Rubric Day 5 — tối đa 100 điểm trong lớp
 
-Trọng số giữ từ [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) commit `3bff13d`; không có bài về nhà hoặc điểm cộng. Task chưa nộp được ghi là chưa có bằng chứng, không tự điền điểm giả. Bản nộp được xem cùng ảnh, class và quy tắc của task; reference để chấm do người phụ trách giữ riêng.
+Trọng số giữ từ [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) commit `3bff13d`; không có bài về nhà hoặc điểm cộng riêng. Task chưa nộp được ghi là chưa có bằng chứng, không tự điền điểm giả. Học viên nộp link fork trên VLearn trong vòng 24 giờ sau buổi lab; công cụ chấm riêng chạy sau cửa sổ nộp. Bản nộp được xem cùng ảnh, class và quy tắc của task; reference để chấm do người phụ trách giữ riêng.
 
 | Task | Loại | Điểm tối đa | Điều cần chứng minh |
 | --- | --- | ---: | --- |
