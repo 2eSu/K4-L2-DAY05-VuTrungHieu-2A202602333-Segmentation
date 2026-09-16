@@ -34,6 +34,6 @@ python3 scripts/inspect_submissions.py --dir submissions
 python3 scripts/package_submission.py --learner-id D5_012
 ```
 
-Lệnh tạo `day5-D5_012.zip` gồm `REPORT.md`, các export có mặt trong `exports/` và `manifest.json` có SHA-256. Gói vẫn cho phép task chưa kịp, nhưng report phải giải thích. Không nộp cả thư mục repo, ảnh gốc, file reference hay file tạm notebook.
+Lệnh lấy các ZIP ở `submissions/`, tạo `day5-D5_012.zip` gồm `REPORT.md`, các ZIP trong thư mục `exports/` **bên trong gói cuối**, và `manifest.json` có SHA-256. Gói vẫn cho phép task chưa kịp, nhưng report phải giải thích. Không nộp cả thư mục repo, ảnh gốc, file reference hay file tạm notebook.
 
 Nếu kênh nhận nhiều file, có thể nộp `REPORT.md` cùng từng ZIP đúng tên mà không chạy lệnh. Nếu kênh nhận một file nhưng bạn không có Python, nén thủ công `REPORT.md` và các ZIP export thành một ZIP, đặt tên `day5-<mã_học_viên>.zip`; không cần tự tạo checksum. Coach chấm cùng một rubric 100 điểm, không ưu tiên cách đóng gói bằng code.

@@ -1,31 +1,132 @@
 # Day 5 — Segmentation Data Lab
 
-**Dành cho học viên · 240 phút trên lớp · tối đa 100 điểm.** Đây là một repo cho cả ngày, không có bài bắt buộc về nhà. Bài giữ nguyên cấu trúc, ảnh, lớp và trọng số của [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) tại commit `3bff13d`: Easy semantic → Medium instance → Hard panoptic → sáu checkpoint. Hướng dẫn và đường nộp được làm rõ để học viên mới cũng có thể tự làm trên CVAT local.
+**Dành cho học viên · 240 phút trên lớp · tối đa 100 điểm.** Đây là một bài lab chung cho cả lớp, không có bài bắt buộc về nhà hoặc điểm cộng. Bài giữ nguyên cấu trúc, ảnh, lớp và trọng số của [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) tại commit `3bff13d`: Easy semantic → Medium instance → Hard panoptic → sáu checkpoint. Repo này bổ sung hướng dẫn CVAT local, tự kiểm và cách nộp, **không thay bài starter bằng bộ ảnh pilot khác**.
 
-**Bắt đầu tại [lab-guide.html](lab-guide.html)** để xem từng bước kèm ảnh chụp CVAT local. Nếu xem trên GitHub không mở được HTML tương tác, tải repo và mở file đó trong Chrome/Edge. Bản văn bản ở [GUIDE.md](GUIDE.md); tên lớp chính xác nằm trong `classes.json` của từng task. Năm [notebook tự kiểm](notebooks/README.md) đi theo đúng Easy → Medium → Hard → checkpoint → nộp, không thay phần thao tác CVAT và không bắt buộc với người mới.
+Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, sửa một lỗi và giải thích quyết định của mình. Bằng chứng cuối giờ là **ZIP export từ CVAT cho các task đã làm và một `REPORT.md`**. Có thể hoàn thành toàn bộ mà không cần lập trình, Jupyter hay SAM. [Hướng dẫn trực quan có ảnh chụp CVAT](lab-guide.html) dành cho người mới; README này là lộ trình đầy đủ để tra cứu trong lúc làm. Nếu xem trên GitHub không mở được HTML, tải repo và mở file đó trong Chrome/Edge.
 
-| Phần | Ảnh | Điểm tối đa | Export CVAT |
-| --- | ---: | ---: | --- |
-| `easy_semantic` | 3 | 20 | Segmentation mask 1.1 |
-| `medium_instance` | 3 | 32 | COCO 1.0 |
-| `hard_panoptic` | 2 | 30 | COCO 1.0 |
-| `cp1_holes` … `cp6_coverage` | 1 mỗi trạm | 6 × 3 = 18 | Theo loại task trong `data/manifest.json` |
-| **Tổng** | | **100** | |
+## Bắt đầu trong 5 phút
 
-## Bài nộp duy nhất
+1. Tải hoặc clone repo về máy và giải nén nếu tải ZIP. Mở `lab-guide.html` để xem ảnh chụp giao diện. Không cần cài notebook để bắt đầu.
+2. Mở **CVAT local của lớp** theo địa chỉ coach cung cấp. Nếu CVAT chạy trên chính máy bạn, địa chỉ thường là `http://localhost:8080`; nếu không mở được, báo coach với ảnh màn hình lỗi. Đừng tự cài một CVAT khác giữa giờ.
+3. Đọc [phiếu quy tắc](guideline-mini-sheet.md). Tạo task đầu tiên tên `easy_semantic`, tải đúng ba ảnh trong [`data/tiers/easy_semantic/images/`](data/tiers/easy_semantic/images/) và thêm từng label từ [`classes.json`](data/tiers/easy_semantic/classes.json).
+4. Vẽ mask, kiểm class và vùng, bấm **Save**, xuất **Segmentation mask 1.1**, lưu thành `easy_semantic.zip`. Các task tiếp theo có bộ ảnh và `classes.json` riêng.
+5. Trước khi nộp, sao chép [`reports/REPORT_TEMPLATE.md`](reports/REPORT_TEMPLATE.md) thành `REPORT.md` và điền thật. Nếu không kịp task nào, ghi phần đã làm và phần còn thiếu; không tạo export rỗng.
 
-Nộp theo kênh lớp thông báo: các ZIP export CVAT đã làm, đặt đúng tên task (ví dụ `easy_semantic.zip`, `cp2_slice.zip`), và một [REPORT.md](reports/REPORT_TEMPLATE.md) đã điền. Nếu kênh chỉ nhận một file, đóng gói `day5-<mã_học_viên>.zip` theo [hướng dẫn nộp](docs/SUBMISSION.md). Không sửa file bên trong ZIP, không nộp ảnh đáp án, và không cần tự chạy mã chấm. Nếu không kịp task nào, ghi rõ task đó trong report; không làm tiếp ở nhà để cộng điểm.
+> **Ảnh trong screenshot CVAT chỉ để tìm nút, không phải ảnh chấm.** Ảnh chấm nằm trong `data/` của repo này. Tên class phải giống từng chữ trong `classes.json` của chính task đang làm.
 
-Ground truth **không có trong repo học viên**. Người chấm giữ reference và trả điểm/phản hồi sau khi nhận bài; file `data/manifest.json` là danh sách task, không phải đáp án. Một kết quả giống bản máy hoặc bạn khác chỉ đo sự tương đồng, chưa chứng minh đúng. Cờ bất thường hay điểm rất cao cũng không tự kết luận gian lận.
+## Ba loại segmentation trong cùng bài
 
-## Tự kiểm khi muốn (không bắt buộc cài Python)
+| Loại | Câu hỏi cần trả lời | Task | Ví dụ quyết định |
+| --- | --- | --- | --- |
+| **Semantic** | Pixel nhìn thấy thuộc **lớp vùng nào**? | Easy; `cp3_thin`, `cp4_curb`, `cp6_coverage` | Road và sidewalk là hai lớp dù màu gần giống. |
+| **Instance** | Pixel nhìn thấy thuộc **vật nào**? | Medium; `cp1_holes`, `cp2_slice`, `cp5_occlusion` | Hai xe cùng class sát nhau vẫn là hai object/mask. |
+| **Panoptic** | Vùng thuộc lớp nào, và vật đếm được là **instance nào**? | Hard | Vẽ stuff như road/sky cùng từng thing như car #1, car #2. |
 
-Chỉ cần CVAT, [hướng dẫn trực quan](lab-guide.html), [mẫu report](reports/REPORT_TEMPLATE.md) để làm bài. Nếu máy có Python 3, đặt export vào `submissions/<mã_task>.zip` rồi chạy `python3 scripts/inspect_submissions.py --dir submissions`; không cần thư viện ngoài. Công cụ kiểm đúng ảnh, class, cấu trúc Segmentation mask 1.1/COCO 1.0 và polygon/RLE; **không kiểm biên đúng, không tính điểm và không kết luận lạm dụng công cụ**. Xem [hướng dẫn nộp](docs/SUBMISSION.md) hoặc mở notebook tương ứng nếu muốn xem ảnh/count dễ hơn.
+**Mask** là vùng pixel bạn gán cho một lớp/vật; một bounding box không thay mask. **Stuff** là vùng không đếm từng cá thể như road, sky; **thing** là vật đếm được như car, person. Chỉ vẽ phần nhìn thấy, không tự đoán biên sau vật che. Một vật bị che thành hai mảng nhìn thấy rời nhau vẫn có thể là **một instance** theo quy tắc task. Xem [phiếu quy tắc](guideline-mini-sheet.md) để kiểm trước export.
 
-Mã chấm của starter cần reference riêng. Repo này không giả lập điểm hay công bố reference; coach mới chạy chấm sau khi có gói bài và đối chiếu thực tế.
+## Toàn bộ task và thang 100 điểm
 
-## Nếu công cụ AI không có
+[`data/manifest.json`](data/manifest.json) là danh mục task, loại và trọng số; `classes.json` của từng task là nguồn chuẩn cho tên class. Các đường dẫn dưới đây chứa ảnh đầu vào, **không chứa đáp án**.
 
-SAM không phải điều kiện để làm lab. Dùng Brush hoặc Polygon; nếu CVAT local hiện Intelligent Scissors thì có thể thử. Khi có gợi ý tự động, bạn vẫn quyết định class, kiểm số object và sửa biên. Ở Medium, tự vẽ **một object đầu tiên** và ghi một quy tắc trước khi xem gợi ý. Xem [CVAT_SETUP.md](CVAT_SETUP.md) khi gặp lỗi công cụ.
+| Task | Ảnh | Điều cần thể hiện | Export CVAT | Tối đa |
+| --- | ---: | --- | --- | ---: |
+| [`easy_semantic`](data/tiers/easy_semantic/) | 3 | Road, sidewalk, building, vegetation, sky | Segmentation mask 1.1 | 20 |
+| [`medium_instance`](data/tiers/medium_instance/) | 3 | Mỗi person/bicycle/car/motorcycle/bus/truck là object riêng | COCO 1.0 | 32 |
+| [`hard_panoptic`](data/tiers/hard_panoptic/) | 2 | Stuff và từng thing theo 12 class của task | COCO 1.0 | 30 |
+| [`cp1_holes`](data/checkpoints/cp1_holes/) | 1 | Kính/khe nằm trong mask vật, không khoét tùy tiện | COCO 1.0 | 3 |
+| [`cp2_slice`](data/checkpoints/cp2_slice/) | 1 | Hai xe sát nhau là hai instance | COCO 1.0 | 3 |
+| [`cp5_occlusion`](data/checkpoints/cp5_occlusion/) | 1 | Vật bị che vẫn một instance; đếm đúng | COCO 1.0 | 3 |
+| [`cp3_thin`](data/checkpoints/cp3_thin/) | 1 | Nét mảnh/cột/biển, phóng to và dùng brush nhỏ | Segmentation mask 1.1 | 3 |
+| [`cp4_curb`](data/checkpoints/cp4_curb/) | 1 | Ranh road–sidewalk theo chức năng/bó vỉa | Segmentation mask 1.1 | 3 |
+| [`cp6_coverage`](data/checkpoints/cp6_coverage/) | 1 | Kiểm vùng thuộc class của task còn bỏ sót | Segmentation mask 1.1 | 3 |
+| **Tổng** | **14** | Ba cấp + sáu checkpoint | | **100** |
 
-Ai hoàn thành sớm có thể phân tích một ca mơ hồ, tìm nguyên nhân mask sai và đề xuất cách sửa. Đây là chiều sâu của cùng bài, **không có điểm cộng hay đường chấm riêng**.
+Checkpoint có **class list riêng**. Ví dụ `cp3_thin` có `pole`, `traffic sign`, `sky`, `road`; `cp4_curb` chỉ có `road`, `sidewalk`. Đọc `classes.json` trước khi tạo mỗi task, không dùng nhầm class của Easy cho mọi task.
+
+## Lộ trình 240 phút trên lớp
+
+Đây là **timebox để còn giờ Save, tự QC và nộp**. Nếu chậm hơn dự kiến, nộp phần làm được và ghi rõ phần còn thiếu; không làm tiếp ở nhà để bù điểm. [Bản lộ trình văn bản](GUIDE.md) có thể mở cạnh CVAT.
+
+| Phút | Việc chính | Bằng chứng giữ lại |
+| ---: | --- | --- |
+| 0–15 | Vào CVAT, đọc quy tắc, tạo Easy với 3 ảnh và đúng 5 class | Task đầu mở được; biết Save/export ở đâu |
+| 15–45 | Easy semantic: tô vùng, kiểm road–sidewalk, Save/export | `easy_semantic.zip` |
+| 45–110 | Medium instance: tự vẽ object đầu rồi tiếp tục từng vật, kiểm thiếu/thừa/gộp/tách | `medium_instance.zip`; một quyết định trong report |
+| 110–120 | Nghỉ | Giữ an toàn các ZIP đã xuất |
+| 120–175 | Hard panoptic: stuff + từng thing trên hai ảnh, QC/export | `hard_panoptic.zip` |
+| 175–185 | Nghỉ | Chuẩn bị checkpoint |
+| 185–215 | Sáu checkpoint theo thứ tự trong manifest | ZIP của các trạm hoàn thành |
+| 215–235 | Kiểm file, sửa và export lại nếu cần; điền report | `REPORT.md`: lỗi, hành động, ba ca cân nhắc |
+| 235–240 | Nộp theo kênh lớp thông báo | File đã nhận hoặc thông báo lỗi gửi coach |
+
+## CVAT local: làm từng bước, không cần code
+
+Giao diện có thể khác đôi chút theo cấu hình lớp. Các ảnh chụp sau chỉ vị trí nút trên **CVAT local**, không phải ảnh/nhãn bài chấm. Nhấp ảnh trong [bản HTML](lab-guide.html#cvat) để xem lớn.
+
+1. **Tạo task.** Trong CVAT chọn **Tasks → Create new task**. Name là mã task đúng như bảng trên, ví dụ `medium_instance`. Ở phần ảnh, chỉ chọn JPG trong `images/` của task đó; đừng gộp ảnh Easy, Medium và Hard vào một task. [Ảnh màn hình tạo task](docs/images/03-task-form.png).
+2. **Thêm labels.** Mở `classes.json` ngay trong thư mục task và thêm từng tên vào **Labels**. Chép đúng dấu cách (`traffic sign` khác `traffic_sign`), chữ thường; không tự thêm class. [Ảnh màn hình thêm label](docs/images/04-label.png).
+3. **Mở Job và vẽ mask.** Chọn Brush hoặc Polygon trong công cụ mask, chọn đúng label rồi vẽ theo phần nhìn thấy. Phóng to ranh giới, thu nhỏ brush cho nét mảnh. Danh sách **Objects** giúp xem class/số object. Một bounding box hình chữ nhật không thay mask. [Ảnh vị trí công cụ](docs/images/08-brush.png).
+4. **Tự QC và Save.** Đi qua từng ảnh theo thứ tự: đúng ảnh → đúng class → đủ vùng/vật → biên → vùng bỏ sót/tràn nền. Với instance, kiểm hai xe có bị gộp hoặc một vật bị tách thành hai object không; với panoptic, kiểm stuff/thing có chồng lấn hay khoảng trống bất hợp lý không. Bấm **Save**, đổi ảnh rồi quay lại một ảnh để chắc dữ liệu còn đó.
+5. **Export từ Job.** Menu Job → **Export job dataset**. Semantic chọn `Segmentation mask 1.1`; instance/panoptic chọn `COCO 1.0`. Tải ZIP rồi đổi **tên ZIP bên ngoài** thành `<mã_task>.zip`, giữ nguyên file bên trong. [Ảnh menu export](docs/images/10-export-menu.png) · [Ảnh chọn format](docs/images/11-export-format.png).
+6. **Nếu export lỗi.** Giữ dữ liệu đã Save, ghi task và màn hình lỗi, báo coach. Đừng tự đổi format rồi coi là tương đương hoặc sửa JSON/PNG bên trong ZIP bằng tay. [CVAT_SETUP.md](CVAT_SETUP.md) là bản tra nhanh khi bị kẹt.
+
+### Quy tắc riêng cho từng chặng
+
+- **Easy — semantic:** chỉ dùng năm class trong [`classes.json`](data/tiers/easy_semantic/classes.json). Tô phần vùng nhìn thấy; ranh road–sidewalk theo chức năng/bó vỉa, không chỉ màu ảnh. Kiểm các mảng rõ ràng còn trống trước khi xuất.
+- **Medium — instance:** sáu class trong [`classes.json`](data/tiers/medium_instance/classes.json). **Trước khi xem gợi ý tự động**, tự vẽ một object đầu tiên và ghi ảnh/vị trí, class, quy tắc chọn biên vào mục 2 của report. Sau đó nếu dùng gợi ý, tự kiểm class, số object, biên và ghi một lỗi đã sửa hoặc lý do giữ đề xuất. Không có gợi ý thì Brush/Polygon vẫn hoàn thành được.
+- **Hard — panoptic:** 12 class trong [`classes.json`](data/tiers/hard_panoptic/classes.json), trong đó road/sidewalk/building/vegetation/sky là stuff. Vẽ cả stuff và **từng** thing; một mask `car` không thay cho mọi xe. Kiểm chồng lấn/khoảng trống bằng mắt trong CVAT. ZIP COCO cấu trúc hợp lệ **không tự chứng minh** panoptic đúng.
+- **Sáu checkpoint:** `cp1_holes` kiểm kính/khe không bị khoét; `cp2_slice` tách hai vật sát nhau; `cp5_occlusion` giữ định danh một vật bị che; `cp3_thin` kiểm nét mảnh; `cp4_curb` kiểm ranh chức năng; `cp6_coverage` kiểm vùng nhìn thấy thuộc các class còn bỏ sót. Mỗi trạm có `classes.json` riêng. Nếu ca mơ hồ, ghi hai cách hiểu và bằng chứng, không bịa nhãn cho đủ.
+
+## Công cụ hỗ trợ: quyết định vẫn là của bạn
+
+**SAM không phải điều kiện làm bài và không bảo đảm có trên CVAT local.** Không thấy SAM thì dùng Brush/Polygon; Intelligent Scissors chỉ là tùy chọn nếu cấu hình lớp có. Không cần cài tool mới để được chấm. Gợi ý tự động có thể ăn bóng/nền, gộp hai xe hoặc bỏ sót chi tiết; bạn vẫn chọn class, kiểm số object và sửa mask. Một object Medium tự làm cùng lời giải thích trong report giúp coach nhìn thấy **cách áp dụng quy tắc**, không phải cơ chế kết luận ai dùng hay không dùng AI.
+
+Người mới có ảnh hướng dẫn, checklist và đường báo lỗi; người quen công cụ làm **cùng bài và cùng bằng chứng**, rồi có thể phân tích sâu một lỗi mơ hồ hoặc hạn chế export khi xong sớm. Phần đào sâu không có điểm cộng hay đường chấm riêng.
+
+## QC và báo cáo trước khi nộp
+
+Checklist chung: **đúng task/ảnh → đúng loại segmentation/class → đủ vùng/vật → biên theo phần nhìn thấy → không gộp/tách nhầm → Save → ZIP đúng format và tên**. Nếu ca không chắc, ghi vị trí, hai cách hiểu, quy tắc/bằng chứng và quyết định hoặc câu hỏi cho coach. Đừng sửa JSON/PNG trong ZIP để làm cho kiểm tra “xanh”.
+
+Sao chép [mẫu report](reports/REPORT_TEMPLATE.md) thành `REPORT.md` ở gốc repo rồi điền:
+
+1. Mã học viên, các task và ảnh đã hoàn thành, ZIP tương ứng; task chưa kịp ghi rõ, **không tự điền điểm**.
+2. Object Medium đầu tiên tự làm: ảnh, vị trí, class và quy tắc chọn biên. Nếu dùng gợi ý sau đó, ghi một quyết định sửa/giữ và lý do; nếu không dùng, vẫn giải thích quyết định gán nhãn.
+3. Một lỗi thật đã phát hiện: task/ảnh/vùng, loại lỗi, dấu hiệu quan sát, hành động sửa, đã Save và export lại chưa.
+4. Ba ca chưa chắc hoặc đã cân nhắc: hai cách hiểu, chứng cứ/quy tắc, quyết định hoặc câu hỏi cụ thể cho coach.
+
+### Notebook và lệnh tự kiểm — tùy chọn
+
+[Năm notebook](notebooks/README.md) dẫn từ nhận ảnh đến nộp: xem ảnh, mask semantic, số mask instance, panoptic và tình trạng ZIP. Chúng **không thêm task**, không bắt bạn viết code và không cần để nhận điểm. Nếu máy có Python 3, đặt ZIP vào `submissions/<mã_task>.zip` rồi chạy từ thư mục repo:
+
+```bash
+python3 scripts/inspect_submissions.py --dir submissions
+```
+
+Lệnh không cần thư viện ngoài; nó kiểm tên ảnh, class, cấu trúc `Segmentation mask 1.1`/`COCO 1.0` và dạng polygon/RLE. **Nó không đọc reference, không biết số object đúng, không kiểm biên đúng và không tính điểm.** `OK` là cấu trúc phù hợp; `THIẾU` là chưa có ZIP; `LỖI` cần xem và export lại trong CVAT. Số `annotations` ở COCO chỉ là số mask *bạn đã nộp*. Người không có Python cứ tự kiểm bằng CVAT và nộp trực tiếp.
+
+## Nộp một lần cuối giờ
+
+Nộp theo kênh lớp thông báo: `REPORT.md` và ZIP export CVAT đã làm, mỗi ZIP đặt đúng tên task (ví dụ `easy_semantic.zip`, `cp2_slice.zip`). Nếu kênh nhận nhiều file, gửi các file đó trực tiếp. Nếu chỉ nhận một file, nén report cùng các ZIP thành `day5-<mã_học_viên>.zip`; **cách nén thủ công hợp lệ như nhau**. Với Python 3, có thể đóng gói và ghi checksum bằng:
+
+```bash
+python3 scripts/package_submission.py --learner-id D5_012
+```
+
+[Hướng dẫn nộp](docs/SUBMISSION.md) ghi format và tên từng ZIP, cách xử lý lỗi. **Không nộp cả repo, ảnh gốc, file tạm notebook hoặc đáp án.** Nếu export lỗi sát giờ, báo coach và ghi trạng thái đã Save trong report; không tạo ZIP rỗng. Nộp phần làm được trong 240 phút, không làm ở nhà để bù.
+
+## Điểm và giới hạn của phép đo
+
+[Rubric 100 điểm](RUBRIC.md) giữ trọng số starter: Easy 20, Medium 32, Hard 30 và sáu checkpoint mỗi trạm 3. Người chấm đối chiếu với reference giữ riêng: semantic dùng mIoU (coverage là tín hiệu QC kèm theo), instance dùng chất lượng mask ghép cặp cùng recall, panoptic dùng PQ. **Repo học viên không chứa ground truth hoặc mã giả lập điểm.** Tên class/format sai có thể làm bài không đọc đúng. IoU giữa hai bản gán nhãn hoặc với gợi ý máy chỉ là **độ giống nhau**, không phải correctness. Điểm rất cao, thời gian hay cờ kỹ thuật không tự kết luận hành vi của học viên; coach xem file và giải thích theo quy tắc.
+
+## Khi bị kẹt, hãy báo đúng vấn đề
+
+| Tình huống | Việc làm ngay |
+| --- | --- |
+| Không vào được CVAT local | Giữ ảnh màn hình lỗi, thời điểm và địa chỉ đã thử; báo coach. |
+| Không thấy SAM | Tiếp tục Brush/Polygon; không chờ cài tool. |
+| Không biết chọn class/ranh | Mở `classes.json` và [phiếu quy tắc](guideline-mini-sheet.md); ghi ảnh/vị trí cùng hai cách hiểu vào report. |
+| Hai vật sát nhau hoặc một vật bị che | Xem quy tắc instance/checkpoint, đếm object trong CVAT trước khi Save. |
+| Export sai format hoặc thiếu ảnh | Save dữ liệu CVAT, export lại đúng task; nếu format không có, báo coach, không sửa ZIP bằng tay. |
+| Không có Python/Jupyter | Vẫn làm toàn bộ trên CVAT, nén thủ công và nộp report. |
+
+**Nguồn bài:** ảnh, taxonomy và trọng số từ starter Day 5 commit `3bff13d`; xem [ghi chú dữ liệu](data/README.md) cho nguồn ảnh và giới hạn sử dụng. Khả năng có SAM và export của cấu hình CVAT lớp cần được kiểm tại môi trường lớp. Tự kiểm ZIP không thay lần chấm có reference của coach.
