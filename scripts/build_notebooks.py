@@ -1,4 +1,4 @@
-"""Regenerate the five small, learner-facing notebooks from reviewed cells."""
+"""Regenerate the single learner-facing Colab/Jupyter notebook."""
 
 from __future__ import annotations
 
@@ -18,22 +18,58 @@ def code(source: str) -> dict:
 
 
 SETUP = '''from pathlib import Path
+import importlib.util
 import sys
-root = next((p for p in [Path.cwd(), *Path.cwd().parents] if (p / "data/manifest.json").is_file()), None)
-assert root is not None, "Mở notebook từ thư mục repo Day 5 (hoặc thư mục notebooks/)."
+import re
+import subprocess
+
+# Trên Colab: dán URL fork của BẠN, ví dụ https://github.com/ten-ban/Day5-Segmentation-Lab-Student
+FORK_URL = ""
+IN_COLAB = importlib.util.find_spec("google.colab") is not None
+if IN_COLAB:
+    assert re.fullmatch(r"https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\\.git)?/?", FORK_URL), "Dán link fork GitHub vào FORK_URL rồi chạy lại ô này."
+    root = Path("/content/day5-student-fork")
+    if not (root / "data/manifest.json").is_file():
+        subprocess.run(["git", "clone", "--depth", "1", FORK_URL, str(root)], check=True)
+    else:
+        existing_url = subprocess.run(["git", "-C", str(root), "remote", "get-url", "origin"], check=True, capture_output=True, text=True).stdout.strip()
+        assert existing_url.rstrip("/").removesuffix(".git") == FORK_URL.rstrip("/").removesuffix(".git"), "Phiên Colab đang có fork khác. Chọn Runtime > Restart runtime rồi chạy lại."
+        print("Đang dùng bản fork đã tải trong phiên Colab này; Runtime > Restart để tải lại bản mới.")
+else:
+    root = next((p for p in [Path.cwd(), *Path.cwd().parents] if (p / "data/manifest.json").is_file()), None)
+    assert root is not None, "Mở notebook từ thư mục repo Day 5 (hoặc thư mục notebooks/)."
 sys.path.insert(0, str(root / "scripts"))
 from inspect_submissions import task_registry, expected_for, inspect_task
 tasks = task_registry(root)
 exports = root / "submissions"
+exports.mkdir(exist_ok=True)
 print("Repo:", root)
 print("Thư mục export:", exports)
 '''
 
+COLAB_UPLOAD = '''# Tùy chọn: nếu ZIP CVAT chưa được push lên fork, đổi thành True và chạy ô này.
+# Colab chỉ giữ file tạm trong phiên làm việc; bạn vẫn phải upload ZIP lên fork để nộp.
+UPLOAD_ZIPS = False
+if UPLOAD_ZIPS:
+    assert IN_COLAB, "Ô upload này chỉ dành cho Google Colab."
+    from google.colab import files
+    uploaded = files.upload()
+    for filename, data in uploaded.items():
+        if filename != Path(filename).name or not filename.endswith(".zip") or Path(filename).stem not in tasks:
+            print("Bỏ qua file không đúng mã task:", filename)
+            continue
+        target = exports / filename
+        target.write_bytes(data)
+        print("Đã nhận:", target.name)
+'''
 
-NOTEBOOKS = {
-    "01-bat-dau-va-nhan-anh.ipynb": [
-        md("# 01 · Nhận bài và nhận ảnh\n\n**Mục tiêu:** tự kiểm đúng 9 task, 14 ảnh, tên class và trọng số trước khi vào CVAT. Notebook hỗ trợ, không phải bài nộp. Chạy từng ô bằng Shift+Enter; nếu không dùng notebook, đọc `lab-guide.html`."),
+
+SECTIONS = {
+    "nhan-anh": [
+        md("# Day 5 · Một notebook tự kiểm từ đầu đến cuối\n\n**Tùy chọn, không chấm điểm.** Chạy từng ô từ trên xuống bằng Shift+Enter/Runtime → Run all. Nếu dùng Colab, chỉ upload file notebook này, dán link fork công khai của bạn vào `FORK_URL` ở ô kế tiếp; notebook sẽ tải ảnh và công cụ tự kiểm từ fork. Nếu chưa push ZIP CVAT, dùng ô upload ZIP tạm phía dưới. Không có đáp án trong notebook. Nếu không dùng code, làm hoàn toàn theo `lab-guide.html`."),
         code(SETUP),
+        md("## Nếu cần, đưa ZIP CVAT vào Colab\n\nNếu đã push ZIP vào `submissions/` trên fork thì bỏ qua ô sau. Nếu chưa, đổi `UPLOAD_ZIPS = True`, chọn các ZIP có tên đúng mã task; Colab giữ tạm, **không tự push lên fork**. Không upload dữ liệu cá nhân hoặc dữ liệu không được phép đưa lên Colab."),
+        code(COLAB_UPLOAD),
         code('''for name, info in tasks.items():
     images, classes = expected_for(name, info, root)
     print(f"{name:18} {info['type']:9} {len(images)} ảnh · {len(classes)} class · {info['weight']} điểm")
@@ -49,7 +85,7 @@ display(Image(filename=str(image_file), width=760))
 '''),
         md("## Tự nhắc trước khi vẽ\n\n- Semantic: mỗi pixel thuộc một lớp vùng; không phải một object riêng.\n- Instance: mỗi vật đếm được là một mask riêng.\n- Panoptic: vừa stuff vừa từng thing.\n- Nếu SAM không có, dùng Brush/Polygon. Đọc `CVAT_SETUP.md`; không chờ cài tool mới được làm."),
     ],
-    "02-qc-semantic.ipynb": [
+    "semantic": [
         md("# 02 · QC semantic và ba checkpoint semantic\n\nXuất `Segmentation mask 1.1` từ CVAT; để ZIP vào `submissions/<mã_task>.zip`. Ô kiểm chỉ kiểm cấu trúc, ảnh và labelmap, **không so đáp án**. Không cần chạy ô này để vẽ được trên CVAT."),
         code(SETUP),
         code('''semantic_names = [name for name, info in tasks.items() if info["type"] == "semantic"]
@@ -77,7 +113,7 @@ else: print("Chưa có ZIP:", zip_path.name)
 '''),
         md("## Câu hỏi tự QC\n\n1. Road và sidewalk được phân theo chức năng hay màu ảnh? 2. Có vùng nhìn thấy mà chưa gán class không? 3. Nét mảnh ở `cp3_thin` đã được xem ở mức zoom lớn chưa? Ghi lỗi và hành động sửa vào `REPORT.md`."),
     ],
-    "03-qc-instance.ipynb": [
+    "instance": [
         md("# 03 · QC instance và ba checkpoint instance\n\nXuất `COCO 1.0`. Một object vật lý = một mask. Tự vẽ object Medium đầu trước gợi ý tự động và ghi quy tắc vào `REPORT.md`; gợi ý không thay quyết định của bạn. COCO `annotation_id` không phải mã object bền vững qua hai lần export."),
         code(SETUP),
         code('''instance_names = [name for name, info in tasks.items() if info["type"] == "instance"]
@@ -99,7 +135,7 @@ if not result["details"].get("counts_by_image_class"): print("Chưa có object �
 '''),
         md("## Ca cần phán đoán\n\n- `cp1_holes`: theo quy tắc task, kính/lỗ nằm trong mask, không tự khoét.\n- `cp2_slice`: hai xe cùng lớp sát nhau vẫn là hai instance.\n- `cp5_occlusion`: vật bị che thành hai phần nhìn thấy vẫn là một instance.\n- Nếu class sai hoặc mask ăn nền, sửa trong CVAT, Save, export lại ZIP."),
     ],
-    "04-qc-panoptic.ipynb": [
+    "panoptic": [
         md("# 04 · QC panoptic\n\n`hard_panoptic` có hai ảnh, 12 class. Vẽ stuff (road, sky…) và từng thing (car #1, car #2…). Theo hợp đồng starter, export `COCO 1.0`; kiểm này chỉ thấy mask và class trong ZIP, **không chứng minh PQ hay mask đúng**."),
         code(SETUP),
         code('''name = "hard_panoptic"
@@ -113,8 +149,8 @@ for note in result["warnings"]: print("KIỂM:", note)
 '''),
         md("## Kiểm bằng mắt trong CVAT trước khi export lại\n\n1. Thing đếm được đã tách từng mask chưa? 2. Stuff có phủ phần thấy được không? 3. Có chồng lấn hoặc vùng chưa phủ ở rìa vật không? 4. Vật bị che: chỉ gán phần nhìn thấy; ghi ca mơ hồ vào report. Công cụ không tự phát hiện đầy đủ các lỗi này."),
     ],
-    "05-kiem-tra-va-nop.ipynb": [
-        md("# 05 · Kiểm gói nộp cuối\n\nBài nộp là **một** gói chứa `REPORT.md` và các ZIP CVAT theo tên task. Bạn có thể nộp phần hoàn thành trong 240 phút; task chưa xong cần ghi rõ trong report. Các ô dưới chỉ hỗ trợ kiểm và đóng gói, không chấm điểm."),
+    "nop-bai": [
+        md("# 05 · Kiểm trước khi nộp\n\nBài nộp là **link fork của bạn trên VLearn**. Fork cần `REPORT.md` đã điền và các ZIP CVAT trong `submissions/`. Bạn có thể nộp phần hoàn thành trong 240 phút; task chưa xong cần ghi rõ trong report. Các ô dưới chỉ hỗ trợ tự kiểm, không chấm điểm."),
         code(SETUP),
         code('''from inspect_submissions import inspect_all
 qc = inspect_all(exports, root)
@@ -125,7 +161,7 @@ for row in qc["tasks"]:
 print("Lỗi hợp đồng:", qc["error_count"], "· task chưa có ZIP:", qc["missing_count"])
 print("ZIP tên lạ:", qc["unknown_zips"])
 '''),
-        md("## Gói một file\n\nTrước tiên sao chép `reports/REPORT_TEMPLATE.md` thành `REPORT.md` ở gốc repo rồi điền thật. Chỉ chạy ô dưới khi đã có mã học viên và report. File gói cuối nằm ở gốc repo, không ở trong `submissions/`. Nếu ô báo lỗi, sửa trên CVAT và export lại."),
+        md("## Gói lưu trữ tùy chọn\n\n`REPORT.md` đã có sẵn ở gốc fork: hãy điền và commit trên GitHub. Ô dưới chỉ tạo thêm ZIP lưu trữ trong phiên notebook, **không phải hình thức nộp**. Bài nộp vẫn là link fork có report và các ZIP riêng trong `submissions/` trên VLearn trong 24 giờ. Nếu ô báo lỗi, sửa trong CVAT và export lại."),
         code('''from package_submission import package
 learner_id = ""  # điền mã học viên, ví dụ D5_012; không dùng họ tên đầy đủ
 if not learner_id:
@@ -140,7 +176,7 @@ else:
     except ValueError as exc:
         print("Chưa thể đóng gói:", exc)
 '''),
-        md("## Sau khi nộp\n\nGiữ bản ZIP gốc và gói đã nộp đến khi nhận phản hồi. Không chỉnh sửa export bên trong ZIP. Điểm 100 chỉ do người chấm đối chiếu reference; QC cấu trúc hoặc hai mask giống nhau không phải điểm."),
+        md("## Sau khi nộp\n\nMở lại fork trên GitHub, kiểm `REPORT.md` đã điền và ZIP đã xuất hiện trong `submissions/`, rồi nộp link fork trên VLearn. Giữ bản ZIP gốc đến khi nhận phản hồi. Không chỉnh sửa export bên trong ZIP. Điểm 100 chỉ do người chấm đối chiếu reference; QC cấu trúc hoặc hai mask giống nhau không phải điểm."),
     ],
 }
 
@@ -148,11 +184,20 @@ else:
 def main() -> None:
     outdir = ROOT / "notebooks"
     outdir.mkdir(exist_ok=True)
-    for filename, cells in NOTEBOOKS.items():
-        payload = {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
-                                                   "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
-        (outdir / filename).write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        print(filename)
+    cells = []
+    setup_seen = False
+    for section in SECTIONS.values():
+        for cell in section:
+            if cell["cell_type"] == "code" and "".join(cell["source"]) == SETUP:
+                if setup_seen:
+                    continue
+                setup_seen = True
+            cells.append(cell)
+    payload = {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+                                               "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
+    filename = "day5-segmentation-tu-kiem.ipynb"
+    (outdir / filename).write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(filename)
 
 
 if __name__ == "__main__":

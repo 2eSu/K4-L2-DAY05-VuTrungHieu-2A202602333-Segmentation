@@ -113,13 +113,17 @@ class ReleaseContract(unittest.TestCase):
         self.assertNotIn("REPORT.md", ignore)
         self.assertNotIn("*.zip", ignore.replace("/*.zip", ""))
 
-    def test_five_notebooks_are_valid_and_compile(self):
+    def test_single_notebook_is_valid_and_compiles(self):
         notebooks = sorted((ROOT / "notebooks").glob("*.ipynb"))
-        self.assertEqual(len(notebooks), 5)
+        self.assertEqual([path.name for path in notebooks], ["day5-segmentation-tu-kiem.ipynb"])
         for path in notebooks:
             payload = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(payload["nbformat"], 4, path.name)
             self.assertTrue(payload["cells"], path.name)
+            joined = "\n".join("".join(cell["source"]) for cell in payload["cells"])
+            self.assertIn('FORK_URL = ""', joined)
+            self.assertIn("UPLOAD_ZIPS = False", joined)
+            self.assertEqual(joined.count("from inspect_submissions import task_registry"), 1)
             for cell in payload["cells"]:
                 if cell["cell_type"] == "code":
                     compile("".join(cell["source"]), path.name, "exec")
