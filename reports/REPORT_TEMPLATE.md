@@ -1,6 +1,6 @@
-# Báo cáo Day 5: điền và nộp dưới tên REPORT.md
+# Mẫu tham khảo để điền REPORT.md
 
-**Cách dùng:** Sao chép file này thành `REPORT.md` rồi điền vào chỗ `…`. Giữ nguyên bốn mục và bảng bên dưới để coach đọc bài nhanh. Viết ngắn, cụ thể theo ảnh và vùng bạn đã làm; không cần dùng thuật ngữ chuyên sâu. Các ví dụ trong phần hướng dẫn chỉ để hiểu cách điền, **không chép thành câu trả lời của mình**.
+**Cách dùng:** Bản cần nộp đã có sẵn ở [`REPORT.md`](../REPORT.md) trong thư mục gốc của fork; mở file đó và điền vào chỗ `…`. File này giải thích từng mục và có ví dụ để tham khảo khi bạn bị kẹt. Giữ nguyên bốn mục và bảng để coach đọc bài nhanh; **không chép ví dụ thành câu trả lời của mình**.
 
 - Mã học viên theo lớp: …
 - Ngày / CVAT local: …

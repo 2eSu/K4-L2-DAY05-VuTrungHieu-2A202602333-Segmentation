@@ -10,7 +10,7 @@ Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, s�
 2. Mở **CVAT local của lớp** theo địa chỉ coach cung cấp. Nếu CVAT chạy trên chính máy bạn, địa chỉ thường là `http://localhost:8080`; nếu không mở được, báo coach với ảnh màn hình lỗi. Đừng tự cài một CVAT khác giữa giờ.
 3. Đọc [phiếu quy tắc](guideline-mini-sheet.md). Tạo task đầu tiên tên `easy_semantic`, tải đúng ba ảnh trong [`data/tiers/easy_semantic/images/`](data/tiers/easy_semantic/images/) và thêm từng label từ [`classes.json`](data/tiers/easy_semantic/classes.json).
 4. Vẽ mask, kiểm class và vùng, bấm **Save**, xuất **Segmentation mask 1.1**, lưu thành `easy_semantic.zip`. Các task tiếp theo có bộ ảnh và `classes.json` riêng.
-5. Trước khi nộp, sao chép [`reports/REPORT_TEMPLATE.md`](reports/REPORT_TEMPLATE.md) thành `REPORT.md` và điền thật. Push/upload report cùng các ZIP lên fork rồi nộp link fork trên VLearn. Nếu không kịp task nào, ghi phần đã làm và phần còn thiếu; không tạo export rỗng.
+5. Trước khi nộp, mở [`REPORT.md`](REPORT.md) đã có sẵn ở gốc fork và điền thật; [mẫu giải thích chi tiết](reports/REPORT_TEMPLATE.md) giúp bạn hiểu từng ô. Push/upload report cùng các ZIP lên fork rồi nộp link fork trên VLearn. Nếu không kịp task nào, ghi phần đã làm và phần còn thiếu; không tạo export rỗng.
 
 > **Ảnh trong screenshot CVAT chỉ để tìm nút, không phải ảnh chấm.** Ảnh chấm nằm trong `data/` của repo này. Tên class phải giống từng chữ trong `classes.json` của chính task đang làm.
 
@@ -87,7 +87,7 @@ Người mới có ảnh hướng dẫn, checklist và đường báo lỗi; ng�
 
 Checklist chung: **đúng task/ảnh → đúng loại segmentation/class → đủ vùng/vật → biên theo phần nhìn thấy → không gộp/tách nhầm → Save → ZIP đúng format và tên**. Nếu ca không chắc, ghi vị trí, hai cách hiểu, quy tắc/bằng chứng và quyết định hoặc câu hỏi cho coach. Đừng sửa JSON/PNG trong ZIP để làm cho kiểm tra “xanh”.
 
-Sao chép [mẫu report](reports/REPORT_TEMPLATE.md) thành `REPORT.md` ở gốc repo rồi điền:
+Mở [`REPORT.md`](REPORT.md) ở gốc fork rồi điền; [mẫu có ví dụ](reports/REPORT_TEMPLATE.md) giải thích từng mục:
 
 1. Mã học viên, các task và ảnh đã hoàn thành, ZIP tương ứng; task chưa kịp ghi rõ, **không tự điền điểm**.
 2. Object Medium đầu tiên tự làm: ảnh, vị trí, class và quy tắc chọn biên. Nếu dùng gợi ý sau đó, ghi một quyết định sửa/giữ và lý do; nếu không dùng, vẫn giải thích quyết định gán nhãn.

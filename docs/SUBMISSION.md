@@ -16,7 +16,7 @@ Repo đề bài mở public. Bạn **fork về tài khoản GitHub của mình**
 
 ## 2. Điền một report
 
-Sao chép `reports/REPORT_TEMPLATE.md` thành `REPORT.md` ở gốc fork và điền mã học viên, task hoàn thành, một quyết định tự vẽ trước gợi ý, một lỗi đã sửa và ba ca cân nhắc. Không tự điền điểm. Nếu export thất bại, ghi tên task, trạng thái đã Save trên CVAT và báo coach.
+Mở [`REPORT.md`](../REPORT.md) đã có sẵn ở gốc fork và điền mã học viên, task hoàn thành, một quyết định tự vẽ trước gợi ý, một lỗi đã sửa và ba ca cân nhắc. Nếu cần hiểu cách điền, xem [mẫu có giải thích](../reports/REPORT_TEMPLATE.md). Không tự điền điểm. Nếu export thất bại, ghi tên task, trạng thái đã Save trên CVAT và báo coach.
 
 ## 3. Tự kiểm tùy chọn
 
@@ -30,7 +30,7 @@ python3 scripts/inspect_submissions.py --dir submissions
 
 ## 4. Đưa bài lên fork và nộp link
 
-Không cần dòng lệnh Git: mở fork trên GitHub → **Add file → Upload files** → đưa `REPORT.md` lên thư mục gốc; mở/tạo `submissions/` trong fork và upload từng ZIP đúng tên → bấm **Commit changes**. Mở lại fork, kiểm `REPORT.md` và các ZIP đã hiện, rồi dán **URL của fork cá nhân** vào bài nộp Day 5 trên VLearn. Đừng dán URL repo đề bài của lớp. Nếu dùng Git trên máy, commit và push các file tương tự; kết quả trên fork phải giống nhau.
+Không cần dòng lệnh Git: mở `REPORT.md` ngay trong fork → bấm biểu tượng bút chì **Edit** → điền bài rồi **Commit changes**. Mở `submissions/` → **Add file → Upload files** → upload từng ZIP đúng tên và Commit. Mở lại fork, kiểm report đã điền và các ZIP đã hiện, rồi dán **URL của fork cá nhân** vào bài nộp Day 5 trên VLearn. Đừng dán URL repo đề bài của lớp. Nếu dùng Git trên máy, commit và push các file tương tự; kết quả trên fork phải giống nhau.
 
 Lệnh đóng thêm một ZIP duy nhất dưới đây là **tùy chọn để lưu/chuyển**, không thay cho `REPORT.md` và các ZIP riêng trên fork:
 

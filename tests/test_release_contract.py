@@ -74,20 +74,23 @@ class ReleaseContract(unittest.TestCase):
                 self.fail(f"Unexpected screenshot type: {path.name}")
 
     def test_report_uses_same_score_weights(self):
-        report = (ROOT / "reports" / "REPORT_TEMPLATE.md").read_text()
-        for row in ("| easy_semantic |", "| medium_instance |", "| hard_panoptic |"):
-            self.assertIn(row, report)
-        self.assertIn("**100**", report)
+        for path in (ROOT / "REPORT.md", ROOT / "reports" / "REPORT_TEMPLATE.md"):
+            report = path.read_text()
+            for row in ("| easy_semantic |", "| medium_instance |", "| hard_panoptic |"):
+                self.assertIn(row, report, path.name)
+            self.assertIn("**100**", report, path.name)
 
     def test_report_keeps_four_evidence_sections_and_explains_them(self):
         report = (ROOT / "reports" / "REPORT_TEMPLATE.md").read_text()
-        for heading in (
+        headings = (
             "## 1. Bài đã nộp",
             "## 2. Một quyết định trước khi dùng gợi ý",
             "## 3. Một lỗi tôi tìm thấy và sửa",
             "## 4. Ba ca chưa chắc hoặc đã cân nhắc",
-        ):
+        )
+        for heading in headings:
             self.assertIn(heading, report)
+            self.assertIn(heading, (ROOT / "REPORT.md").read_text())
         self.assertIn("Bạn cần điền gì?", report)
         self.assertIn("Ví dụ cách giải thích", report)
 
