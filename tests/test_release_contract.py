@@ -1,9 +1,12 @@
 """Structural checks for the learner-facing Day 5 repository."""
 
 import html.parser
+import io
 import json
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -123,10 +126,29 @@ class ReleaseContract(unittest.TestCase):
             joined = "\n".join("".join(cell["source"]) for cell in payload["cells"])
             self.assertIn('FORK_URL = ""', joined)
             self.assertIn("UPLOAD_ZIPS = False", joined)
+            self.assertIn("BƯỚC 0 · Thư viện cần dùng", joined)
+            self.assertIn('"-m", "pip", "install", "IPython"', joined)
+            self.assertIn("Không cài `requirements.txt`", joined)
+            self.assertIn("Nếu gặp lỗi, làm gì?", joined)
             self.assertEqual(joined.count("from inspect_submissions import task_registry"), 1)
             for cell in payload["cells"]:
                 if cell["cell_type"] == "code":
                     compile("".join(cell["source"]), path.name, "exec")
+
+    def test_notebook_install_step_skips_existing_ipython_and_handles_missing(self):
+        path = ROOT / "notebooks" / "day5-segmentation-tu-kiem.ipynb"
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        code_cells = ["".join(cell["source"]) for cell in payload["cells"] if cell["cell_type"] == "code"]
+        install_cell = next(source for source in code_cells if "BƯỚC 0 — kiểm tra môi trường" in source)
+        with patch("importlib.util.find_spec", return_value=object()), patch("subprocess.run") as run:
+            with redirect_stdout(io.StringIO()) as output:
+                exec(install_cell, {})
+            self.assertIn("SẴN SÀNG", output.getvalue())
+            run.assert_not_called()
+        with patch("importlib.util.find_spec", return_value=None), patch("subprocess.run") as run:
+            with redirect_stdout(io.StringIO()):
+                exec(install_cell, {})
+            self.assertEqual(run.call_args.args[0][-2:], ["install", "IPython"])
 
 
 if __name__ == "__main__":
