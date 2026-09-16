@@ -67,6 +67,26 @@ class ReleaseContract(unittest.TestCase):
             self.assertIn(row, report)
         self.assertIn("**100**", report)
 
+    def test_report_keeps_four_evidence_sections_and_explains_them(self):
+        report = (ROOT / "reports" / "REPORT_TEMPLATE.md").read_text()
+        for heading in (
+            "## 1. Bài đã nộp",
+            "## 2. Một quyết định trước khi dùng gợi ý",
+            "## 3. Một lỗi tôi tìm thấy và sửa",
+            "## 4. Ba ca chưa chắc hoặc đã cân nhắc",
+        ):
+            self.assertIn(heading, report)
+        self.assertIn("Bạn cần điền gì?", report)
+        self.assertIn("Ví dụ cách giải thích", report)
+
+    def test_visual_guide_covers_starter_and_not_pilot_task_names(self):
+        guide = (ROOT / "lab-guide.html").read_text()
+        for name in EXPECTED_COUNTS:
+            self.assertIn(name, guide)
+        self.assertNotIn("D05-MANUAL", guide)
+        self.assertIn("data-lightbox", guide)
+        self.assertIn("data-progress-label", guide)
+
     def test_five_notebooks_are_valid_and_compile(self):
         notebooks = sorted((ROOT / "notebooks").glob("*.ipynb"))
         self.assertEqual(len(notebooks), 5)
