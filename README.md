@@ -114,6 +114,12 @@ python3 scripts/package_submission.py --learner-id D5_012
 
 [Hướng dẫn nộp](docs/SUBMISSION.md) ghi format và tên từng ZIP, cách xử lý lỗi. **Không nộp cả repo, ảnh gốc, file tạm notebook hoặc đáp án.** Nếu export lỗi sát giờ, báo coach và ghi trạng thái đã Save trong report; không tạo ZIP rỗng. Nộp phần làm được trong 240 phút, không làm ở nhà để bù.
 
+## Mã nguồn starter có ngay trong repo này
+
+Mã xử lý mask và tính metric từ starter nằm ở [`lab_utils.py`](lab_utils.py); hai lệnh chấm một task và lập scorecard nằm ở [`scoring/score.py`](scoring/score.py) và [`scoring/scorecard.py`](scoring/scorecard.py). Như vậy ai muốn đọc cách tính điểm không cần chuyển sang repo khác. **Học viên không phải chạy các lệnh chấm để hoàn thành bài.**
+
+Các lệnh chấm cần reference được giữ riêng và ba thư viện trong [`requirements.txt`](requirements.txt). Repo này chỉ có ảnh đầu vào, không có reference nên chạy chấm tại đây sẽ báo thiếu reference, **không tạo điểm 0**. Mã chuẩn bị/tạo reference không được phát cùng repo học viên. Lệnh [`scripts/inspect_submissions.py`](scripts/inspect_submissions.py) ở trên vẫn là cách tự kiểm ZIP không cần reference hay thư viện ngoài.
+
 ## Điểm và giới hạn của phép đo
 
 [Rubric 100 điểm](RUBRIC.md) giữ trọng số starter: Easy 20, Medium 32, Hard 30 và sáu checkpoint mỗi trạm 3. Người chấm đối chiếu với reference giữ riêng: semantic dùng mIoU (coverage là tín hiệu QC kèm theo), instance dùng chất lượng mask ghép cặp cùng recall, panoptic dùng PQ. **Repo học viên không chứa ground truth hoặc mã giả lập điểm.** Tên class/format sai có thể làm bài không đọc đúng. IoU giữa hai bản gán nhãn hoặc với gợi ý máy chỉ là **độ giống nhau**, không phải correctness. Điểm rất cao, thời gian hay cờ kỹ thuật không tự kết luận hành vi của học viên; coach xem file và giải thích theo quy tắc.
