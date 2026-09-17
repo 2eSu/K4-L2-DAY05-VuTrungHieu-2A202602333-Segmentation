@@ -94,7 +94,9 @@ Mở [`REPORT.md`](REPORT.md) ở gốc fork rồi điền; [mẫu có ví dụ]
 3. Một lỗi thật đã phát hiện: task/ảnh/vùng, loại lỗi, dấu hiệu quan sát, hành động sửa, đã Save và export lại chưa.
 4. Ba ca chưa chắc hoặc đã cân nhắc: hai cách hiểu, chứng cứ/quy tắc, quyết định hoặc câu hỏi cụ thể cho coach.
 
-### Notebook, kiểm cấu trúc và tự chấm — tùy chọn
+### GitHub Actions tự kiểm khi push; notebook và lệnh trên máy là dự phòng
+
+Trên fork của bạn, bật tab **Actions** một lần, upload ZIP CVAT vào `submissions/` rồi Commit. Workflow **Day 5 self-check** sẽ chạy tự động và hiện kết quả ở **Actions → lần chạy mới nhất → Summary**: trước giờ phát đáp án là kiểm cấu trúc; sau khi release ground truth chính thức được công bố là điểm tự đánh giá Easy + Medium + Hard **/82**. Có thể sửa mask trong CVAT, Save/export/push lại bao nhiêu lần cần để nhận phản hồi mới. [Hướng dẫn từng nút và giới hạn của điểm tự đánh giá](docs/SELF_SCORING.md). Không cần Python, Colab hay đưa đáp án vào fork. Nếu release chưa được công bố, action chưa thể tính điểm; bài cốt lõi vẫn nộp bình thường.
 
 [Một notebook dùng được trên Colab](notebooks/day5-segmentation-tu-kiem.ipynb) dẫn từ nhận ảnh đến nộp: xem ảnh, mask semantic, số mask instance, panoptic và tình trạng ZIP. Nó **không thêm task**, không bắt bạn viết code và không cần để nhận điểm. Notebook có ô kiểm môi trường/tự cài IPython nếu thiếu và giải thích từng trạng thái QC; [cách upload notebook lên Colab và nhập link fork](notebooks/README.md) có từng bước. Bạn không cần upload cả repo. Nếu máy có Python 3.10+, đặt ZIP vào `submissions/<mã_task>.zip` rồi chạy từ thư mục repo:
 
@@ -102,7 +104,7 @@ Mở [`REPORT.md`](REPORT.md) ở gốc fork rồi điền; [mẫu có ví dụ]
 python3 scripts/inspect_submissions.py --dir submissions
 ```
 
-Lệnh không cần thư viện ngoài; nó kiểm tên ảnh, class, cấu trúc `Segmentation mask 1.1`/`COCO 1.0` và dạng polygon/RLE. **Nó không đọc reference, không biết số object đúng, không kiểm biên đúng và không tính điểm.** `OK` là cấu trúc phù hợp; `THIẾU` là chưa có ZIP; `LỖI` cần xem và export lại trong CVAT. Số `annotations` ở COCO chỉ là số mask *bạn đã nộp*. Người không có Python cứ tự kiểm bằng CVAT và nộp trực tiếp. Nếu reference ba tier được phát trong giờ cuối, xem [cách cài thư viện, đặt reference và chạy script chấm](docs/SELF_SCORING.md); script có thể tính metric khi đủ đáp án đúng cấu trúc.
+Lệnh không cần thư viện ngoài; nó kiểm tên ảnh, class, cấu trúc `Segmentation mask 1.1`/`COCO 1.0` và dạng polygon/RLE. **Nó không đọc reference, không biết số object đúng, không kiểm biên đúng và không tính điểm.** `OK` là cấu trúc phù hợp; `THIẾU` là chưa có ZIP; `LỖI` cần xem và export lại trong CVAT. Số `annotations` ở COCO chỉ là số mask *bạn đã nộp*. Người không có Python cứ tự kiểm bằng CVAT và nộp trực tiếp. Sau giờ phát đáp án, GitHub Actions có thể chạy scorer; [cách chạy script bằng tay](docs/SELF_SCORING.md) vẫn là dự phòng.
 
 ## Fork → làm bài → push → nộp link trong vòng 24 giờ
 
@@ -118,7 +120,7 @@ python3 scripts/package_submission.py --learner-id D5_012
 
 Mã xử lý mask và tính metric từ starter nằm ở [`lab_utils.py`](lab_utils.py); hai lệnh tham khảo chấm một task và lập scorecard nằm ở [`scoring/score.py`](scoring/score.py) và [`scoring/scorecard.py`](scoring/scorecard.py). [Hướng dẫn tự đánh giá ba tier](docs/SELF_SCORING.md) giải thích từng lệnh và giới hạn của report. Công cụ chấm chính thức của lớp được vận hành riêng **sau cửa sổ nộp 24 giờ**. **Học viên không phải chạy các lệnh chấm để hoàn thành bài cốt lõi.**
 
-Các lệnh chấm cần reference được giữ riêng và ba thư viện trong [`requirements.txt`](requirements.txt). Repo này chỉ có ảnh đầu vào, không có reference nên chạy chấm trước lúc phát sẽ báo thiếu reference, **không tạo điểm 0**. Mã chuẩn bị/tạo reference không được phát cùng repo học viên. Lệnh [`scripts/inspect_submissions.py`](scripts/inspect_submissions.py) ở trên vẫn là cách tự kiểm ZIP không cần reference hay thư viện ngoài. **Không đưa đáp án đã nhận vào fork public**.
+Các lệnh chấm cần reference được giữ riêng và ba thư viện trong [`requirements.txt`](requirements.txt). Repo này chỉ có ảnh đầu vào, không có reference nên chạy chấm trước lúc phát sẽ báo thiếu reference, **không tạo điểm 0**. Repo có mã **kiểm và giải nén gói reference chính thức** cho Action, nhưng không có mã tạo đáp án hay file đáp án. Lệnh [`scripts/inspect_submissions.py`](scripts/inspect_submissions.py) ở trên vẫn là cách tự kiểm ZIP không cần reference hay thư viện ngoài. **Không đưa đáp án đã nhận vào fork public**.
 
 ## Điểm và giới hạn của phép đo
 

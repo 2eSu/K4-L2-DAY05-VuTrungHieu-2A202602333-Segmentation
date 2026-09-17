@@ -18,7 +18,7 @@ Thông báo của người phụ trách có **hai mức bonus**: **10** khi ch�
 
 Script `score.py` trả metric/điểm từng task và `scorecard.py --group tiers` gộp ba tier tối đa **82 điểm**; **không script nào in PASS, tính bonus, xếp top 3 hoặc kiểm tra ai vẽ trước giờ phát đáp án**. Người phụ trách cần công bố tiêu chí PASS cụ thể, cách xếp hạng/đồng hạng và bản export dùng để xét top 3. Để top 3 phản ánh chất lượng độc lập, nên chốt ZIP và thời điểm trước lúc phát ground truth; bài sửa sau khi xem reference dùng cho học và chấm theo quy định, không thể tự nhận là bài chưa xem đáp án. Chưa có xác nhận từ người phụ trách thì học viên **không tự cộng điểm bonus** vào `REPORT.md`.
 
-[Hướng dẫn tự chạy scorer sau khi nhận reference](docs/SELF_SCORING.md) có lệnh cài thư viện, kiểm đường dẫn, chạy ba task và đọc `SCORECARD.md`. Người không chạy được Python vẫn làm/nộp bài cốt lõi; nếu muốn xét bonus do môi trường lỗi, báo coach ngay trong giờ lab. Ground truth đã phát **không được đưa vào fork công khai**. Cờ `SUSPECT` khi metric cao chỉ là tín hiệu xem lại, đặc biệt không đủ kết luận gì sau lúc đáp án đã được phát.
+[Hướng dẫn GitHub Actions tự đánh giá sau khi nhận reference](docs/SELF_SCORING.md) có đường xem Summary không cần Python, cùng lệnh dự phòng trên máy. Học viên có thể lặp lại lượt tự đánh giá; kết quả sau khi đáp án đã phát **không dùng làm bằng chứng độc lập để xếp top 3**. Người không chạy được Action vẫn làm/nộp bài cốt lõi; nếu muốn xét bonus do môi trường lỗi, báo coach ngay trong giờ lab. Ground truth đã phát **không được đưa vào fork công khai**. Cờ `SUSPECT` khi metric cao chỉ là tín hiệu xem lại, đặc biệt không đủ kết luận gì sau lúc đáp án đã được phát.
 
 ## Cách đọc điểm kỹ thuật của starter
 
