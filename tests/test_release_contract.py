@@ -3,6 +3,8 @@
 import html.parser
 import io
 import json
+import subprocess
+import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -67,6 +69,24 @@ class ReleaseContract(unittest.TestCase):
                 if label["name"] in metadata.get("colors", {}):
                     rgb = metadata["colors"][label["name"]]
                     self.assertEqual(label["color"], "#{:02x}{:02x}{:02x}".format(*rgb), name)
+
+    def test_starter_converter_reproduces_each_cvat_label_file(self):
+        converter = ROOT / "scripts" / "convert_label_cvat.py"
+        for name in EXPECTED_COUNTS:
+            base = ROOT / "data" / self.manifest["tasks"][name]["path"]
+            with tempfile.TemporaryDirectory() as directory:
+                output = Path(directory) / "labels.json"
+                subprocess.run(
+                    ["python3", converter, "--input", base / "classes.json", "--output", output],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(
+                    json.loads(output.read_text(encoding="utf-8")),
+                    json.loads((base / "cvat-labels.json").read_text(encoding="utf-8")),
+                    name,
+                )
 
     def test_no_reference_answers_are_shipped(self):
         self.assertFalse(list(ROOT.rglob("groundtruth")))

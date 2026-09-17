@@ -28,6 +28,8 @@ Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, s�
 
 [`data/manifest.json`](data/manifest.json) là danh mục task, loại và trọng số; `classes.json` của từng task là nguồn chuẩn cho tên class, **không phải JSON để dán vào CVAT**. File `cvat-labels.json` cùng thư mục là bản **dán vào Labels → Raw**; tên label trong hai file được kiểm tự động là giống nhau. Các đường dẫn dưới đây chứa ảnh đầu vào, **không chứa đáp án**.
 
+Các file `cvat-labels.json` đã được tạo sẵn, nên học viên không cần chạy code. Nếu coach cần tạo lại một file sau khi thay đổi schema, dùng script từ starter: `python3 scripts/convert_label_cvat.py -i <đường_dẫn>/classes.json -o <đường_dẫn>/cvat-labels.json`.
+
 | Task | Ảnh | Điều cần thể hiện | Export CVAT | Tối đa |
 | --- | ---: | --- | --- | ---: |
 | [`easy_semantic`](data/tiers/easy_semantic/) | 3 | Road, sidewalk, building, vegetation, sky | Segmentation mask 1.1 | 20 |
