@@ -28,7 +28,7 @@ python3 scripts/inspect_submissions.py --dir submissions
 
 `OK` chỉ có nghĩa ZIP đọc được và khớp hợp đồng ảnh/class/mask. `THIẾU` nghĩa chưa có ZIP; đó không phải lỗi kỹ thuật. `LỖI` cần sửa trong CVAT, Save và export lại. Với COCO, dòng `annotations` là số mask đã nộp, **không phải số object đúng**. Với panoptic, phải tự xem lại phủ vùng/chồng lấn trong CVAT. Bạn cũng có thể [upload một notebook lên Colab](../notebooks/README.md) hoặc mở bằng Jupyter trên máy.
 
-Khi push ZIP lên fork, **Day 5 self-check** trong tab Actions tự kiểm cấu trúc, không tải đáp án và không tính điểm. Bật Actions một lần trên fork; nếu muốn chạy lại mà chưa sửa file, chọn **Run workflow**. Khi được phát reference, [scorer trên máy](SELF_SCORING.md) là phần phản hồi tùy chọn. Không đưa đáp án lên fork hay Colab công khai. Nếu action không chạy, báo coach trong buổi lab, vẫn giữ ZIP/report và nộp bài cốt lõi.
+Khi push ZIP lên fork, **Day 5 self-check** trong tab Actions tự kiểm cấu trúc. Sau khi ground truth ba tier được phát qua release chính thức, cùng workflow sẽ [hiện điểm tự đánh giá trong Summary](SELF_SCORING.md) mà không cần cài Python. Bật Actions một lần trên fork; nếu muốn chạy lại mà chưa sửa file, chọn **Run workflow**. Script trên máy vẫn là dự phòng. Chỉ gói reference chính thức mới được dùng; không đưa đáp án lên fork hay Colab công khai. Nếu action không chạy, báo coach trong buổi lab, vẫn giữ ZIP/report và nộp bài cốt lõi.
 
 ## 4. Đưa bài lên fork và nộp link
 

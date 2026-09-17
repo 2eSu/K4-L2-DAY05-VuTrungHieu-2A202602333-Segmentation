@@ -50,7 +50,7 @@ Ví dụ cách giải thích, không phải đáp án cho ảnh của bạn: “
 - Quy tắc và hành động sửa: …
 - Sau sửa đã Save và export lại chưa? …
 
-**Nếu đã chạy scorer trên máy sau khi được phát reference:** ghi một kết quả liên quan lỗi bạn vừa sửa, chẳng hạn “`easy_semantic`: per-class IoU của `sidewalk` tăng sau khi tôi sửa ranh bó vỉa, Save và export lại”; nếu chưa có điểm, ghi “chưa có”. GitHub Actions chỉ kiểm cấu trúc ZIP, không cho điểm. Xem [hướng dẫn tự đánh giá](../docs/SELF_SCORING.md). Kết quả ba tier là tổng **/82**, không tự điền PASS, top 3 hoặc bonus. Đừng đưa ground truth vào fork.
+**Nếu đã xem điểm tự đánh giá trên GitHub Actions hoặc chạy scorer:** ghi một kết quả liên quan lỗi bạn vừa sửa, chẳng hạn “`easy_semantic`: per-class IoU của `sidewalk` tăng sau khi tôi sửa ranh bó vỉa, Save và export lại”; nếu chưa có điểm, ghi “chưa có”. Xem [hướng dẫn xem Summary hoặc chạy dự phòng](../docs/SELF_SCORING.md). Kết quả ba tier là tổng **/82**, không tự điền PASS, top 3 hoặc bonus. Đừng đưa ground truth vào fork.
 
 ## 4. Ba ca chưa chắc hoặc đã cân nhắc
 
