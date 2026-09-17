@@ -8,7 +8,7 @@ Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, s�
 
 1. Đăng nhập GitHub, bấm **Fork** ở repo đề bài và chọn tài khoản của bạn. Tải fork về máy (Download ZIP hoặc clone), giải nén nếu cần; mở `lab-guide.html` để xem ảnh chụp giao diện. Không cần cài notebook để bắt đầu.
 2. Mở **CVAT local của lớp** theo địa chỉ coach cung cấp. Nếu CVAT chạy trên chính máy bạn, địa chỉ thường là `http://localhost:8080`; nếu không mở được, báo coach với ảnh màn hình lỗi. Đừng tự cài một CVAT khác giữa giờ.
-3. Đọc [phiếu quy tắc](guideline-mini-sheet.md). Tạo task đầu tiên tên `easy_semantic`, tải đúng ba ảnh trong [`data/tiers/easy_semantic/images/`](data/tiers/easy_semantic/images/) và thêm từng label từ [`classes.json`](data/tiers/easy_semantic/classes.json).
+3. Đọc [phiếu quy tắc](guideline-mini-sheet.md). Tạo task đầu tiên tên `easy_semantic`, tải đúng ba ảnh trong [`data/tiers/easy_semantic/images/`](data/tiers/easy_semantic/images/). Nếu dùng ô **Labels → Raw** của CVAT, sao chép **toàn bộ** [`cvat-labels.json`](data/tiers/easy_semantic/cvat-labels.json) của task rồi dán vào đó. Nếu thêm từng label bằng **Constructor**, đọc tên trong [`classes.json`](data/tiers/easy_semantic/classes.json).
 4. Vẽ mask, kiểm class và vùng, bấm **Save**, xuất **Segmentation mask 1.1**, lưu thành `easy_semantic.zip`. Các task tiếp theo có bộ ảnh và `classes.json` riêng.
 5. Trước khi nộp, mở [`REPORT.md`](REPORT.md) đã có sẵn ở gốc fork và điền thật; [mẫu giải thích chi tiết](reports/REPORT_TEMPLATE.md) giúp bạn hiểu từng ô. Push/upload report cùng các ZIP lên fork rồi nộp link fork trên VLearn. Nếu không kịp task nào, ghi phần đã làm và phần còn thiếu; không tạo export rỗng.
 
@@ -26,7 +26,7 @@ Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, s�
 
 ## Toàn bộ task và thang 100 điểm
 
-[`data/manifest.json`](data/manifest.json) là danh mục task, loại và trọng số; `classes.json` của từng task là nguồn chuẩn cho tên class. Các đường dẫn dưới đây chứa ảnh đầu vào, **không chứa đáp án**.
+[`data/manifest.json`](data/manifest.json) là danh mục task, loại và trọng số; `classes.json` của từng task là nguồn chuẩn cho tên class, **không phải JSON để dán vào CVAT**. File `cvat-labels.json` cùng thư mục là bản **dán vào Labels → Raw**; tên label trong hai file được kiểm tự động là giống nhau. Các đường dẫn dưới đây chứa ảnh đầu vào, **không chứa đáp án**.
 
 | Task | Ảnh | Điều cần thể hiện | Export CVAT | Tối đa |
 | --- | ---: | --- | --- | ---: |
@@ -64,7 +64,7 @@ Checkpoint có **class list riêng**. Ví dụ `cp3_thin` có `pole`, `traffic s
 Giao diện có thể khác đôi chút theo cấu hình lớp. Các ảnh chụp sau chỉ vị trí nút trên **CVAT local**, không phải ảnh/nhãn bài chấm. Nhấp ảnh trong [bản HTML](lab-guide.html#cvat) để xem lớn.
 
 1. **Tạo task.** Trong CVAT chọn **Tasks → Create new task**. Name là mã task đúng như bảng trên, ví dụ `medium_instance`. Ở phần ảnh, chỉ chọn JPG trong `images/` của task đó; đừng gộp ảnh Easy, Medium và Hard vào một task. [Ảnh màn hình tạo task](docs/images/03-task-form.png).
-2. **Thêm labels.** Mở `classes.json` ngay trong thư mục task và thêm từng tên vào **Labels**. Chép đúng dấu cách (`traffic sign` khác `traffic_sign`), chữ thường; không tự thêm class. [Ảnh màn hình thêm label](docs/images/04-label.png).
+2. **Thêm labels.** Có hai cách tương đương: mở `cvat-labels.json` **của đúng task**, chọn toàn bộ nội dung từ `[` đến `]`, copy, rồi vào **Labels → Raw**, dán đè nội dung hiện có và bấm **Done**; hoặc mở `classes.json` và thêm **từng tên** qua **Constructor → Add label**. Đừng dán `classes.json` vào Raw: file đó có thêm metadata dành cho bài lab nên CVAT không nhận. Kiểm số lượng/tên label trước khi Submit; `traffic sign` có dấu cách. Nếu task đã có annotation, **không dán đè Raw** vì thay label có thể làm mất liên kết annotation. [Ảnh màn hình thêm từng label](docs/images/04-label.png).
 3. **Mở Job và vẽ mask.** Chọn Brush hoặc Polygon trong công cụ mask, chọn đúng label rồi vẽ theo phần nhìn thấy. Phóng to ranh giới, thu nhỏ brush cho nét mảnh. Danh sách **Objects** giúp xem class/số object. Một bounding box hình chữ nhật không thay mask. [Ảnh vị trí công cụ](docs/images/08-brush.jpg).
 4. **Tự QC và Save.** Đi qua từng ảnh theo thứ tự: đúng ảnh → đúng class → đủ vùng/vật → biên → vùng bỏ sót/tràn nền. Với instance, kiểm hai xe có bị gộp hoặc một vật bị tách thành hai object không; với panoptic, kiểm stuff/thing có chồng lấn hay khoảng trống bất hợp lý không. Bấm **Save**, đổi ảnh rồi quay lại một ảnh để chắc dữ liệu còn đó.
 5. **Export từ Job.** Menu Job → **Export job dataset**. Semantic chọn `Segmentation mask 1.1`; instance/panoptic chọn `COCO 1.0`. Tải ZIP rồi đổi **tên ZIP bên ngoài** thành `<mã_task>.zip`, giữ nguyên file bên trong. [Ảnh menu export](docs/images/10-export-menu.jpg) · [Ảnh chọn format](docs/images/11-export-format.jpg).

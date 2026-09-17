@@ -53,6 +53,21 @@ class ReleaseContract(unittest.TestCase):
             self.assertEqual(len(list((base / "images").glob("*.jpg"))), count, name)
             self.assertTrue((base / "classes.json").is_file(), name)
 
+    def test_cvat_raw_labels_match_starter_classes(self):
+        for name in EXPECTED_COUNTS:
+            base = ROOT / "data" / self.manifest["tasks"][name]["path"]
+            metadata = json.loads((base / "classes.json").read_text(encoding="utf-8"))
+            labels = json.loads((base / "cvat-labels.json").read_text(encoding="utf-8"))
+            self.assertEqual([label["name"] for label in labels], metadata["classes"], name)
+            for label in labels:
+                self.assertEqual(set(label), {"name", "color", "type", "attributes"}, name)
+                self.assertEqual(label["type"], "any", name)
+                self.assertEqual(label["attributes"], [], name)
+                self.assertRegex(label["color"], r"^#[0-9a-f]{6}$", name)
+                if label["name"] in metadata.get("colors", {}):
+                    rgb = metadata["colors"][label["name"]]
+                    self.assertEqual(label["color"], "#{:02x}{:02x}{:02x}".format(*rgb), name)
+
     def test_no_reference_answers_are_shipped(self):
         self.assertFalse(list(ROOT.rglob("groundtruth")))
         self.assertFalse(list(ROOT.rglob("instances-golden.json")))
