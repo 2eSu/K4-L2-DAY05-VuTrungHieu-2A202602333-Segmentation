@@ -169,6 +169,7 @@
     figure img { display: block; width: 100%; height: auto; transition: transform 200ms var(--ease); }
     figcaption { color: var(--muted); font-size: .9rem; padding-top: var(--space-2); }
     .note { background: var(--caution-bg); color: var(--caution); padding: var(--space-4) var(--space-6); border-radius: var(--radius); max-width: 78ch; }
+    .command { overflow-x: auto; padding: var(--space-4) var(--space-6); border-radius: var(--radius); background: var(--ink); color: var(--surface); line-height: 1.7; }
     .timeline { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
     .block { border-top: 2px solid var(--ink); padding-top: var(--space-4); }
     .block strong { font-variant-numeric: tabular-nums; }
@@ -218,6 +219,7 @@
         <a href="#data">Dữ liệu</a>
         <a href="#cvat">CVAT từng bước</a>
         <a href="#quality">Tự kiểm</a>
+        <a href="#self-score">Giờ cuối</a>
         <a href="#submit">Nộp bài</a>
       </nav>
     </div>
@@ -347,8 +349,8 @@
         <div class="block"><strong>45–110</strong><h3>Medium instance</h3><p>Tự vẽ object đầu, làm ba ảnh, kiểm gộp/tách và export COCO.</p></div>
         <div class="block"><strong>110–120</strong><h3>Nghỉ</h3><p>Giữ an toàn ZIP đã xuất.</p></div>
         <div class="block"><strong>120–175</strong><h3>Hard panoptic</h3><p>Vẽ stuff và từng thing trên hai ảnh, kiểm rồi export.</p></div>
-        <div class="block"><strong>175–185</strong><h3>Nghỉ</h3><p>Chuẩn bị cho sáu ca ngắn.</p></div>
-        <div class="block"><strong>185–215</strong><h3>Sáu checkpoint</h3><p>Mỗi task một ảnh, dùng đúng classes.json riêng.</p></div>
+        <div class="block"><strong>175–185</strong><h3>Nghỉ</h3><p>Ground truth ba tier được phát từ phút 180 theo hướng dẫn lớp; không đưa đáp án lên fork.</p></div>
+        <div class="block"><strong>185–215</strong><h3>Checkpoint và tự đánh giá</h3><p>Mỗi task một ảnh, đúng classes.json. Người xong sớm có thể chạy scorer của repo gốc với reference mới nhận.</p></div>
         <div class="block"><strong>215–240</strong><h3>QC, report, chuẩn bị push</h3><p>Kiểm ZIP, điền report, Save lần cuối và ghi lỗi cần báo coach. Nộp link fork trên VLearn trong 24 giờ sau buổi lab.</p></div>
       </div>
     </section>
@@ -374,6 +376,20 @@
         <div class="block"><strong>Colab hoặc Jupyter · tùy chọn</strong><h3>Một notebook tự kiểm</h3><p><a href="notebooks/day5-segmentation-tu-kiem.ipynb" download>Tải một file notebook</a> rồi <a href="notebooks/README.md">xem cách mở trên Colab và bước kiểm/cài thư viện</a> để kiểm ảnh, mask, số object đã nộp và ZIP. Notebook không có đáp án, không tạo điểm.</p></div>
       </div>
       <p class="note">Nếu có Python 3 nhưng không có Jupyter, xem <a href="docs/SUBMISSION.md">lệnh kiểm ZIP và hướng dẫn nộp</a>. Dòng “OK” chỉ xác nhận cấu trúc export, không chứng minh mask đúng. IoU giữa hai bản nhãn chỉ là độ giống nhau khi chưa có reference phù hợp.</p>
+      <div id="self-score" class="quickstart" aria-labelledby="self-score-title">
+        <h3 id="self-score-title">Giờ cuối: chạy script tự đánh giá khi đã nhận đáp án</h3>
+        <ol>
+          <li><strong>Trước khi mở ground truth:</strong> Save/export ba ZIP Easy, Medium, Hard của chính bạn. Người phụ trách cần thông báo cách ghi nhận bản trước khi phát đáp án nếu xét top 3.</li>
+          <li><strong>Sau khi được phát:</strong> giải nén reference theo cấu trúc <code>data/tiers/&lt;task&gt;/groundtruth/</code> trên máy, không upload lên fork/Colab công khai. Mở Terminal tại thư mục gốc fork đã tải về; cài thư viện bằng lệnh đầu. Trên Windows thay <code>python3</code> bằng <code>py -3</code>.</li>
+        </ol>
+        <pre class="command"><code>python3 -m pip install -r requirements.txt
+python3 scoring/score.py easy_semantic submissions/easy_semantic.zip --group tiers
+python3 scoring/score.py medium_instance submissions/medium_instance.zip --group tiers
+python3 scoring/score.py hard_panoptic submissions/hard_panoptic.zip --group tiers
+python3 scoring/scorecard.py --group tiers --dir submissions --out reports/tiers</code></pre>
+        <p>Mở <code>reports/tiers/SCORECARD.md</code> để đọc tổng ba tier <strong>/82</strong>. Nếu một class/vật bị sai, sửa trong CVAT → Save → export lại → chạy lại; ghi một lỗi thật vào <code>REPORT.md</code>. Chưa có reference hoặc máy lỗi thì tiếp tục bài cốt lõi và báo coach. <a href="docs/SELF_SCORING.md">Mở hướng dẫn chi tiết, cách đọc mIoU/matched IoU/PQ và xử lý lỗi</a>.</p>
+        <p class="note">Scorer không tự in PASS hay top 3. Theo thông báo lớp, bonus report đạt yêu cầu là 10, top 3 độ chính xác là 20; điểm ghi nhận vẫn tối đa 100, không tự cộng hai mức. Người phụ trách xác nhận tiêu chí PASS và bản xét xếp hạng. Độ giống cao sau khi đáp án được phát không chứng minh đã tự làm trước đó.</p>
+      </div>
     </section>
 
     <section id="submit" aria-labelledby="submit-title">
@@ -384,7 +400,7 @@
         <li>Trong fork, mở <code>REPORT.md</code> → <strong>Edit → Commit changes</strong>. Mở <code>submissions/</code> → <strong>Add file → Upload files</strong> để đưa ZIP vào đó rồi Commit. Dùng Git trên máy để push cũng được, nhưng không bắt buộc.</li>
         <li>Mở lại fork, kiểm file đã hiện rồi dán <strong>link fork của bạn</strong> vào VLearn trong vòng 24 giờ sau buổi lab. Đừng dán link repo đề bài của lớp. Nếu export lỗi, ghi tình trạng Save và báo coach. <a href="docs/SUBMISSION.md">Xem cách nộp chi tiết</a>.</li>
       </ol>
-      <p class="note">Điểm tối đa là 100. Hạn 24 giờ chỉ là cửa sổ nhận bài, không có bài tập về nhà hoặc điểm cộng riêng. IoU giữa hai mask chỉ là độ giống nhau; bạn không phải tự đoán điểm.</p>
+      <p class="note">Rubric cốt lõi là 100 và điểm ghi nhận không vượt 100 dù có bonus giờ cuối. Hạn 24 giờ là cửa sổ nhận bài, không có bài tập về nhà bắt buộc. Không đưa ground truth lên fork. IoU giữa hai mask chỉ là độ giống nhau nếu chưa có reference; bạn không tự xác nhận PASS hay top 3.</p>
     </section>
     <section id="glossary" aria-labelledby="glossary-title">
       <div class="section-head"><h2 id="glossary-title">Sáu từ đủ để bắt đầu</h2><p>Không cần thuộc định nghĩa trước khi vào CVAT. Quay lại đây khi gặp một từ lạ trong task hoặc report.</p></div>

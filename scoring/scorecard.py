@@ -5,9 +5,11 @@ e.g. submissions/easy_semantic.zip, submissions/medium_instance.zip,
 submissions/cp1_holes.zip ...
 
 Usage:  python scoring/scorecard.py [--dir submissions] [--out reports]
+        python scoring/scorecard.py --group tiers --out reports/tiers
 
-Writes reports/SCORECARD.md and reports/scorecard.json only when every submitted
-task can be evaluated against the protected reference. All tasks sum to 100.
+Writes SCORECARD.md and scorecard.json under --out only when every submitted
+task in the selected group can be evaluated against its reference. All tasks
+sum to 100; the three tiers alone sum to 82.
 Review signals are not evidence of misconduct.
 """
 import argparse
@@ -62,6 +64,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", default="submissions")
     ap.add_argument("--out", default="reports")
+    ap.add_argument("--group", choices=("all", "tiers", "checkpoints"), default="all",
+                    help="score only one task group when only its references are available")
     args = ap.parse_args()
     sub_dir = ROOT / args.dir
     reg = load_registry()
@@ -69,6 +73,8 @@ def main():
     # tiers first, then checkpoints — every task counts toward the 100
     order = ([n for n, i in reg.items() if i["_group"] == "tiers"]
              + [n for n, i in reg.items() if i["_group"] == "checkpoints"])
+    if args.group != "all":
+        order = [n for n in order if reg[n]["_group"] == args.group]
 
     submissions = {name: find_submission(sub_dir, name) for name in order}
     if not any(submissions.values()):
@@ -101,10 +107,11 @@ def main():
             all_flags.append(f"[{name}] {f}")
 
     total = round(total, 1)
-    max_total = sum(i.get("weight", 0) for i in reg.values())
-    out = {"total": total, "max": max_total, "review_flags": all_flags, "tasks": rows}
+    max_total = sum(reg[name].get("weight", 0) for name in order)
+    out = {"total": total, "max": max_total, "group": args.group,
+           "review_flags": all_flags, "tasks": rows}
     outdir = ROOT / args.out
-    outdir.mkdir(exist_ok=True)
+    outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "scorecard.json").write_text(json.dumps(out, indent=2))
 
     lines = ["# Day-5 Segmentation — Scorecard", ""]

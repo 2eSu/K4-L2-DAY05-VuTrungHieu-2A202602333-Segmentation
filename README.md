@@ -1,6 +1,6 @@
 # Day 5 — Segmentation Data Lab
 
-**Dành cho học viên · 240 phút thực hành trên lớp · tối đa 100 điểm.** Repo đề bài mở công khai; mỗi học viên **fork repo này**, làm bài trong fork của mình, push kết quả rồi nộp link fork trên VLearn trong vòng 24 giờ sau buổi lab. Bài được chấm bằng công cụ riêng sau cửa sổ nộp. Không có bài tập về nhà hoặc điểm cộng riêng. Bài giữ nguyên cấu trúc, ảnh, lớp và trọng số của [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) tại commit `3bff13d`: Easy semantic → Medium instance → Hard panoptic → sáu checkpoint. Repo này bổ sung hướng dẫn CVAT local, tự kiểm và cách nộp, **không thay bài starter bằng bộ ảnh pilot khác**.
+**Dành cho học viên · 240 phút thực hành trên lớp · điểm ghi nhận tối đa 100.** Repo đề bài mở công khai; mỗi học viên **fork repo này**, làm bài trong fork của mình, push kết quả rồi nộp link fork trên VLearn trong vòng 24 giờ sau buổi lab. Bài được chấm bằng công cụ riêng sau cửa sổ nộp. Không có bài tập bắt buộc về nhà. Bài giữ nguyên cấu trúc, ảnh, lớp và trọng số của [starter Day 5](https://github.com/VinUni-AI20k/Day5-Segmentation-Data-Student) tại commit `3bff13d`: Easy semantic → Medium instance → Hard panoptic → sáu checkpoint. Repo này bổ sung hướng dẫn CVAT local, tự kiểm và cách nộp, **không thay bài starter bằng bộ ảnh pilot khác**.
 
 Bạn sẽ tự tạo mask cho ảnh trong repo, kiểm lại theo quy tắc, sửa một lỗi và giải thích quyết định của mình. Bằng chứng cần nộp là **ZIP export từ CVAT cho các task đã làm và một `REPORT.md`** trong fork của bạn. Có thể hoàn thành toàn bộ mà không cần lập trình, Jupyter hay SAM. [Hướng dẫn trực quan có ảnh chụp CVAT](lab-guide.html) dành cho người mới; README này là lộ trình đầy đủ để tra cứu trong lúc làm. Nếu xem trên GitHub không mở được HTML, tải fork về và mở file đó trong Chrome/Edge.
 
@@ -45,7 +45,7 @@ Checkpoint có **class list riêng**. Ví dụ `cp3_thin` có `pole`, `traffic s
 
 ## Lộ trình 240 phút trên lớp
 
-Đây là **timebox cho 240 phút thực hành**, để còn giờ Save, tự QC và chuẩn bị bài nộp. Nếu chậm hơn dự kiến, ghi rõ phần đã làm và phần còn thiếu. Hạn đưa link fork lên VLearn là **24 giờ sau buổi lab**; công cụ chấm riêng chạy sau cửa sổ nộp. [Bản lộ trình văn bản](GUIDE.md) có thể mở cạnh CVAT.
+Đây là **timebox cho 240 phút thực hành**, để còn giờ Save, tự QC và chuẩn bị bài nộp. Nếu chậm hơn dự kiến, ghi rõ phần đã làm và phần còn thiếu. **Ground truth của Easy, Medium và Hard dự kiến được phát trong 60 phút cuối**, sau phần tự làm; lúc đó có thể dùng script để tìm và sửa lỗi. Hạn đưa link fork lên VLearn là **24 giờ sau buổi lab**; công cụ chấm riêng chạy sau cửa sổ nộp. [Bản lộ trình văn bản](GUIDE.md) có thể mở cạnh CVAT.
 
 | Phút | Việc chính | Bằng chứng giữ lại |
 | ---: | --- | --- |
@@ -54,8 +54,8 @@ Checkpoint có **class list riêng**. Ví dụ `cp3_thin` có `pole`, `traffic s
 | 45–110 | Medium instance: tự vẽ object đầu rồi tiếp tục từng vật, kiểm thiếu/thừa/gộp/tách | `medium_instance.zip`; một quyết định trong report |
 | 110–120 | Nghỉ | Giữ an toàn các ZIP đã xuất |
 | 120–175 | Hard panoptic: stuff + từng thing trên hai ảnh, QC/export | `hard_panoptic.zip` |
-| 175–185 | Nghỉ | Chuẩn bị checkpoint |
-| 185–215 | Sáu checkpoint theo thứ tự trong manifest | ZIP của các trạm hoàn thành |
+| 175–185 | Nghỉ; nhận reference ba tier từ phút 180 theo hướng dẫn lớp | Không đưa đáp án lên fork |
+| 185–215 | Sáu checkpoint; người xong sớm chạy scorer ba tier | ZIP trạm đã làm; kết quả tự đánh giá nếu có |
 | 215–235 | Kiểm file, sửa và export lại nếu cần; điền report | `REPORT.md`: lỗi, hành động, ba ca cân nhắc |
 | 235–240 | Save lần cuối, kiểm danh sách ZIP/report, ghi lỗi cần báo coach | Bài sẵn để đưa lên fork |
 
@@ -81,7 +81,7 @@ Giao diện có thể khác đôi chút theo cấu hình lớp. Các ảnh chụ
 
 **SAM không phải điều kiện làm bài và không bảo đảm có trên CVAT local.** Không thấy SAM thì dùng Brush/Polygon; Intelligent Scissors chỉ là tùy chọn nếu cấu hình lớp có. Không cần cài tool mới để được chấm. Gợi ý tự động có thể ăn bóng/nền, gộp hai xe hoặc bỏ sót chi tiết; bạn vẫn chọn class, kiểm số object và sửa mask. Một object Medium tự làm cùng lời giải thích trong report giúp coach nhìn thấy **cách áp dụng quy tắc**, không phải cơ chế kết luận ai dùng hay không dùng AI.
 
-Người mới có ảnh hướng dẫn, checklist và đường báo lỗi; người quen công cụ làm **cùng bài và cùng bằng chứng**, rồi có thể phân tích sâu một lỗi mơ hồ hoặc hạn chế export khi xong sớm. Phần đào sâu không có điểm cộng hay đường chấm riêng.
+Người mới có ảnh hướng dẫn, checklist và đường báo lỗi; người quen công cụ làm **cùng bài và cùng bằng chứng**, rồi có thể phân tích sâu một lỗi mơ hồ hoặc hạn chế export khi xong sớm. Sau khi reference được phát, người hoàn thành sớm có thể chạy scorer để nhận phản hồi theo [hướng dẫn từng lệnh](docs/SELF_SCORING.md); đây không phải điều kiện nộp bài cốt lõi.
 
 ## QC và báo cáo trước khi nộp
 
@@ -94,7 +94,7 @@ Mở [`REPORT.md`](REPORT.md) ở gốc fork rồi điền; [mẫu có ví dụ]
 3. Một lỗi thật đã phát hiện: task/ảnh/vùng, loại lỗi, dấu hiệu quan sát, hành động sửa, đã Save và export lại chưa.
 4. Ba ca chưa chắc hoặc đã cân nhắc: hai cách hiểu, chứng cứ/quy tắc, quyết định hoặc câu hỏi cụ thể cho coach.
 
-### Notebook và lệnh tự kiểm — tùy chọn
+### Notebook, kiểm cấu trúc và tự chấm — tùy chọn
 
 [Một notebook dùng được trên Colab](notebooks/day5-segmentation-tu-kiem.ipynb) dẫn từ nhận ảnh đến nộp: xem ảnh, mask semantic, số mask instance, panoptic và tình trạng ZIP. Nó **không thêm task**, không bắt bạn viết code và không cần để nhận điểm. Notebook có ô kiểm môi trường/tự cài IPython nếu thiếu và giải thích từng trạng thái QC; [cách upload notebook lên Colab và nhập link fork](notebooks/README.md) có từng bước. Bạn không cần upload cả repo. Nếu máy có Python 3.10+, đặt ZIP vào `submissions/<mã_task>.zip` rồi chạy từ thư mục repo:
 
@@ -102,7 +102,7 @@ Mở [`REPORT.md`](REPORT.md) ở gốc fork rồi điền; [mẫu có ví dụ]
 python3 scripts/inspect_submissions.py --dir submissions
 ```
 
-Lệnh không cần thư viện ngoài; nó kiểm tên ảnh, class, cấu trúc `Segmentation mask 1.1`/`COCO 1.0` và dạng polygon/RLE. **Nó không đọc reference, không biết số object đúng, không kiểm biên đúng và không tính điểm.** `OK` là cấu trúc phù hợp; `THIẾU` là chưa có ZIP; `LỖI` cần xem và export lại trong CVAT. Số `annotations` ở COCO chỉ là số mask *bạn đã nộp*. Người không có Python cứ tự kiểm bằng CVAT và nộp trực tiếp.
+Lệnh không cần thư viện ngoài; nó kiểm tên ảnh, class, cấu trúc `Segmentation mask 1.1`/`COCO 1.0` và dạng polygon/RLE. **Nó không đọc reference, không biết số object đúng, không kiểm biên đúng và không tính điểm.** `OK` là cấu trúc phù hợp; `THIẾU` là chưa có ZIP; `LỖI` cần xem và export lại trong CVAT. Số `annotations` ở COCO chỉ là số mask *bạn đã nộp*. Người không có Python cứ tự kiểm bằng CVAT và nộp trực tiếp. Nếu reference ba tier được phát trong giờ cuối, xem [cách cài thư viện, đặt reference và chạy script chấm](docs/SELF_SCORING.md); script có thể tính metric khi đủ đáp án đúng cấu trúc.
 
 ## Fork → làm bài → push → nộp link trong vòng 24 giờ
 
@@ -116,13 +116,13 @@ python3 scripts/package_submission.py --learner-id D5_012
 
 ## Mã nguồn starter có ngay trong repo này
 
-Mã xử lý mask và tính metric từ starter nằm ở [`lab_utils.py`](lab_utils.py); hai lệnh tham khảo chấm một task và lập scorecard nằm ở [`scoring/score.py`](scoring/score.py) và [`scoring/scorecard.py`](scoring/scorecard.py). Công cụ chấm chính thức của lớp được vận hành riêng **sau cửa sổ nộp 24 giờ**. **Học viên không phải chạy các lệnh chấm để hoàn thành bài.**
+Mã xử lý mask và tính metric từ starter nằm ở [`lab_utils.py`](lab_utils.py); hai lệnh tham khảo chấm một task và lập scorecard nằm ở [`scoring/score.py`](scoring/score.py) và [`scoring/scorecard.py`](scoring/scorecard.py). [Hướng dẫn tự đánh giá ba tier](docs/SELF_SCORING.md) giải thích từng lệnh và giới hạn của report. Công cụ chấm chính thức của lớp được vận hành riêng **sau cửa sổ nộp 24 giờ**. **Học viên không phải chạy các lệnh chấm để hoàn thành bài cốt lõi.**
 
-Các lệnh chấm cần reference được giữ riêng và ba thư viện trong [`requirements.txt`](requirements.txt). Repo này chỉ có ảnh đầu vào, không có reference nên chạy chấm tại đây sẽ báo thiếu reference, **không tạo điểm 0**. Mã chuẩn bị/tạo reference không được phát cùng repo học viên. Lệnh [`scripts/inspect_submissions.py`](scripts/inspect_submissions.py) ở trên vẫn là cách tự kiểm ZIP không cần reference hay thư viện ngoài.
+Các lệnh chấm cần reference được giữ riêng và ba thư viện trong [`requirements.txt`](requirements.txt). Repo này chỉ có ảnh đầu vào, không có reference nên chạy chấm trước lúc phát sẽ báo thiếu reference, **không tạo điểm 0**. Mã chuẩn bị/tạo reference không được phát cùng repo học viên. Lệnh [`scripts/inspect_submissions.py`](scripts/inspect_submissions.py) ở trên vẫn là cách tự kiểm ZIP không cần reference hay thư viện ngoài. **Không đưa đáp án đã nhận vào fork public**.
 
 ## Điểm và giới hạn của phép đo
 
-[Rubric 100 điểm](RUBRIC.md) giữ trọng số starter: Easy 20, Medium 32, Hard 30 và sáu checkpoint mỗi trạm 3. Người chấm đối chiếu với reference giữ riêng: semantic dùng mIoU (coverage là tín hiệu QC kèm theo), instance dùng chất lượng mask ghép cặp cùng recall, panoptic dùng PQ. **Repo học viên không chứa ground truth hoặc mã giả lập điểm.** Tên class/format sai có thể làm bài không đọc đúng. IoU giữa hai bản gán nhãn hoặc với gợi ý máy chỉ là **độ giống nhau**, không phải correctness. Điểm rất cao, thời gian hay cờ kỹ thuật không tự kết luận hành vi của học viên; coach xem file và giải thích theo quy tắc.
+[Rubric 100 điểm](RUBRIC.md) giữ trọng số starter: Easy 20, Medium 32, Hard 30 và sáu checkpoint mỗi trạm 3. Người chấm đối chiếu với reference phù hợp: semantic dùng mIoU (coverage là tín hiệu QC kèm theo), instance dùng chất lượng mask ghép cặp cùng recall, panoptic dùng PQ. Bonus giờ cuối có mức 10 cho report đạt yêu cầu và 20 cho top 3 độ chính xác; **điểm ghi nhận vẫn không vượt 100**, hai mức không tự cộng chồng. Cách xác nhận PASS và xếp top 3 do người phụ trách thông báo; scorer không tự quyết định. **Repo học viên không chứa ground truth.** Tên class/format sai có thể làm bài không đọc đúng. IoU giữa hai bản gán nhãn hoặc với gợi ý máy chỉ là **độ giống nhau**, không phải correctness. Điểm rất cao, thời gian hay cờ kỹ thuật không tự kết luận hành vi của học viên; coach xem file và giải thích theo quy tắc.
 
 ## Khi bị kẹt, hãy báo đúng vấn đề
 
