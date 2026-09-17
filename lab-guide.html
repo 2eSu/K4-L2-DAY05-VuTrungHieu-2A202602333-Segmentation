@@ -377,13 +377,13 @@
       </div>
       <p class="note">Nếu có Python 3 nhưng không có Jupyter, xem <a href="docs/SUBMISSION.md">lệnh kiểm ZIP và hướng dẫn nộp</a>. Dòng “OK” chỉ xác nhận cấu trúc export, không chứng minh mask đúng. IoU giữa hai bản nhãn chỉ là độ giống nhau khi chưa có reference phù hợp.</p>
       <div id="self-score" class="quickstart" aria-labelledby="self-score-title">
-        <h3 id="self-score-title">Giờ cuối: GitHub tự đánh giá bài đã push</h3>
+        <h3 id="self-score-title">Giờ cuối: kiểm ZIP, rồi tự học từ reference</h3>
         <ol>
           <li><strong>Trước khi mở ground truth:</strong> Save/export ba ZIP Easy, Medium, Hard của chính bạn. Người phụ trách cần thông báo cách ghi nhận bản trước khi phát đáp án nếu xét top 3.</li>
-          <li><strong>Trên fork GitHub:</strong> vào tab <strong>Actions</strong>, bật workflow nếu GitHub hỏi. Upload ZIP vào <code>submissions/</code> rồi Commit. Mở <strong>Actions → Day 5 self-check → lần chạy mới nhất → Summary</strong>. Mỗi lần sửa trong CVAT, Save/export và push ZIP mới, action chạy lại; cũng có thể bấm <strong>Run workflow</strong>.</li>
-          <li><strong>Sau khi đáp án được phát:</strong> nếu gói ground truth đã được công bố ở release chính thức, Summary hiện điểm Easy + Medium + Hard tối đa <strong>82</strong>. Nếu chỉ thấy kiểm cấu trúc và báo chưa có reference, chờ người phụ trách phát release hoặc dùng cách dự phòng bên dưới. Không upload đáp án lên fork.</li>
+          <li><strong>Trên fork GitHub:</strong> vào tab <strong>Actions</strong>, bật workflow nếu GitHub hỏi. Upload ZIP vào <code>submissions/</code> rồi Commit. Mở <strong>Actions → Day 5 self-check → lần chạy mới nhất → Summary</strong>. Action chỉ kiểm cấu trúc ZIP; sửa trong CVAT, Save/export và push lại nếu có lỗi.</li>
+          <li><strong>Sau khi đáp án được phát:</strong> nếu muốn xem metric Easy + Medium + Hard tối đa <strong>82</strong>, dùng scorer trên máy theo các bước bên dưới. Không upload đáp án lên fork. Mini-hackathon nếu được mở sẽ chấm riêng trên commit đã khóa; không thay điểm chính thức.</li>
         </ol>
-        <details><summary>Nếu cần chạy script trên máy thay GitHub Actions</summary>
+        <details><summary>Cách chạy scorer trên máy sau khi nhận reference</summary>
         <p>Giải nén reference được phát theo cấu trúc <code>data/tiers/&lt;task&gt;/groundtruth/</code> trên máy. Mở Terminal tại thư mục gốc repo đã tải về; trên Windows thay <code>python3</code> bằng <code>py -3</code>.</p>
         <pre class="command"><code>python3 -m pip install -r requirements.txt
 python3 scoring/score.py easy_semantic submissions/easy_semantic.zip --group tiers

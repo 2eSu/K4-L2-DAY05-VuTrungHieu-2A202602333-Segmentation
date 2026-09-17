@@ -45,63 +45,11 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Check whether the official reference has been released
-        id: reference
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Explain the scope of this check
         shell: bash
         run: |
-          if gh release view day5-reference-v1 \
-              --repo VinUni-AI20k/Day5-Segmentation-Lab-Student \
-              --json assets --jq '.assets[].name' 2>/dev/null | grep -Fxq 'day5-groundtruth.zip'; then
-            echo 'available=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'available=false' >> "$GITHUB_OUTPUT"
-            echo '## Điểm tự đánh giá' >> "$GITHUB_STEP_SUMMARY"
-            echo 'Chưa có gói ground truth chính thức. Sau khi được phát trong giờ cuối, chọn Actions → Day 5 self-check → Run workflow hoặc push ZIP mới để chạy lại.' >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Download and validate the official tier reference
-        if: steps.reference.outputs.available == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          gh release download day5-reference-v1 \
-            --repo VinUni-AI20k/Day5-Segmentation-Lab-Student \
-            --pattern day5-groundtruth.zip \
-            --dir "$RUNNER_TEMP"
-          python scripts/install_reference.py "$RUNNER_TEMP/day5-groundtruth.zip"
-
-      - name: Score completed Easy, Medium and Hard exports
-        if: steps.reference.outputs.available == 'true'
-        shell: bash
-        run: |
-          if [ ! -f submissions/easy_semantic.zip ] && \
-             [ ! -f submissions/medium_instance.zip ] && \
-             [ ! -f submissions/hard_panoptic.zip ]; then
-            echo '## Điểm tự đánh giá' >> "$GITHUB_STEP_SUMMARY"
-            echo 'Chưa có ZIP Easy, Medium hoặc Hard trong submissions/. Hãy export ít nhất một task rồi push để xem điểm.' >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          python -m pip install -r requirements.txt
-          if ! python scoring/scorecard.py --group tiers --dir submissions \
-              --out "$RUNNER_TEMP/day5-score" > "$RUNNER_TEMP/scoring.txt" 2>&1; then
-            {
-              echo '## Không tính được điểm tự đánh giá'
-              echo '```text'
-              cat "$RUNNER_TEMP/scoring.txt"
-              echo '```'
-              echo 'Kiểm ZIP/format hoặc báo coach. Không tự sửa JSON trong ZIP.'
-            } >> "$GITHUB_STEP_SUMMARY"
-            cat "$RUNNER_TEMP/scoring.txt"
-            exit 1
-          fi
-          cat "$RUNNER_TEMP/scoring.txt"
           {
-            echo '## Điểm tự đánh giá sau khi phát đáp án'
-            cat "$RUNNER_TEMP/day5-score/SCORECARD.md"
-            echo ''
-            echo '**Đây là phản hồi ba task tối đa 82 điểm, không phải điểm chính thức /100, PASS, bonus hay bảng xếp hạng.**'
-            echo 'Sửa mask trong CVAT → Save → export ZIP mới → push lại để nhận phản hồi mới.'
+            echo '## Giới hạn của kiểm tra tự động'
+            echo 'Workflow trong fork chỉ kiểm cấu trúc ZIP; không tải đáp án và không tính điểm.'
+            echo 'Kết quả OK không chứng minh mask đúng. Bảng xếp hạng mini-hackathon (nếu mở) được chấm bởi hệ thống riêng trên commit đã khóa; điểm chính thức /100 vẫn theo quy trình lớp.'
           } >> "$GITHUB_STEP_SUMMARY"

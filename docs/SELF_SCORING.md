@@ -1,17 +1,16 @@
 # Tự đánh giá với reference được phát trong giờ cuối
 
-Phần điểm tự đánh giá **chỉ mở khi người phụ trách phát ground truth cho Easy, Medium và Hard**, dự kiến trong 60 phút cuối của buổi lab. Trước thời điểm đó, hãy tự vẽ, Save, export và kiểm bằng mắt; repo học viên không chứa đáp án. Cách dễ nhất là để GitHub Actions chạy scorer sau khi bạn push ZIP lên fork. Không cần cài Python hay tự giải nén ground truth. Đây là vòng phản hồi để tìm lỗi và sửa, không thay bài gán nhãn, report hay chấm điểm chính thức.
+Phần điểm tự đánh giá **chỉ làm được khi người phụ trách phát ground truth cho Easy, Medium và Hard**, dự kiến trong 60 phút cuối của buổi lab. Trước thời điểm đó, hãy tự vẽ, Save, export và kiểm bằng mắt; repo học viên không chứa đáp án. GitHub Actions trong fork **chỉ kiểm cấu trúc ZIP, không tải ground truth và không tính điểm**. Nếu muốn xem metric sau khi được phát reference, chạy scorer trên máy theo phần dưới. Đây là vòng phản hồi để tìm lỗi và sửa, không thay bài gán nhãn, report hay chấm điểm chính thức.
 
-## Cách dễ nhất — xem điểm ngay trên fork
+## Trên fork — kiểm cấu trúc không cần code
 
 1. Trên **fork của bạn**, mở tab **Actions** và bật workflows nếu GitHub hỏi xác nhận. GitHub không tự bật Actions trên fork mới. Không cần tạo secret, token hoặc sửa file workflow.
 2. Save/export từ CVAT rồi upload ZIP đúng tên vào `submissions/` trên fork; bấm **Commit changes**. Workflow **Day 5 self-check** sẽ tự chạy mỗi khi ZIP hoặc `REPORT.md` được push. Mở **Actions → Day 5 self-check → lần chạy mới nhất → Summary**. Nếu chưa thấy lần chạy, kiểm Actions đã bật; sau đó chọn **Run workflow** để chạy thủ công.
-3. Trước lúc gói đáp án chính thức xuất hiện, Summary chỉ kiểm cấu trúc ZIP và ghi “chưa có ground truth”; **không cho điểm 0**. Sau khi người phụ trách công bố gói đáp án trong giờ cuối, bấm **Run workflow** hoặc push ZIP mới. Summary sẽ hiện scorecard Easy + Medium + Hard tối đa **82**, task chưa có ZIP hiện `missing`/0. Sáu checkpoint vẫn theo rubric nhưng không được tự chấm khi chưa có reference.
-4. Nếu kết quả chưa hợp lý, mở đúng task trong CVAT, xem mask/class/object, sửa → Save → export lại → upload ZIP mới cùng tên vào fork. Bạn có thể lặp lại để xem phản hồi mới; **lần chạy cũ không phải bài nộp cuối**. Nếu ZIP lỗi, xem dòng `LỖI` trong Summary; nếu workflow đỏ, mở log bước lỗi và báo coach. Không sửa JSON/PNG trong ZIP hoặc sửa workflow để “đạt điểm”.
+3. Summary chỉ nói `OK`, `THIẾU` hoặc `LỖI` cấu trúc; **không có điểm 0/82**. Nếu ZIP lỗi, xem chi tiết, sửa trong CVAT → Save → export lại → upload ZIP mới. Không sửa JSON/PNG trong ZIP hoặc workflow để “đạt điểm”.
 
-Action lấy gói đáp án từ release chính thức của repo lớp **sau khi** được phát; không chép đáp án vào fork. Nếu lớp chỉ gửi file qua kênh khác mà chưa công bố release, GitHub Actions **chưa thể tính điểm**; dùng hướng dẫn chạy trên máy bên dưới hoặc chờ người phụ trách. Điểm tự đánh giá sau lúc xem đáp án **không chứng minh chất lượng bản làm độc lập trước đó**, không tự quyết định PASS, bonus hay top 3. Trên fork, học viên có quyền sửa workflow/code; vì vậy Summary chỉ là phản hồi cá nhân, **công cụ chấm riêng của lớp vẫn là nguồn điểm chính thức**.
+Đáp án không được đặt trong workflow do học viên kiểm soát. Điểm tự đánh giá sau lúc xem đáp án **không chứng minh chất lượng bản làm độc lập trước đó**, không tự quyết định PASS, bonus hay top 3. Mini-hackathon nếu được mở sẽ chấm riêng trên commit đã khóa theo thời gian từng ca; công cụ chấm chính thức vẫn là nguồn điểm /100.
 
-## Cách dự phòng — chạy script trên máy
+## Tự xem metric sau khi được phát reference — chạy script trên máy
 
 ## Trước khi mở đáp án
 

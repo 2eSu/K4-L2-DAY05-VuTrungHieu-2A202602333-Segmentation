@@ -57,6 +57,13 @@ class ReleaseContract(unittest.TestCase):
         self.assertFalse(list(ROOT.rglob("groundtruth")))
         self.assertFalse(list(ROOT.rglob("instances-golden.json")))
 
+    def test_fork_workflow_never_downloads_reference_or_scores(self):
+        workflow = (ROOT / ".github" / "workflows" / "day5-self-check.yml").read_text()
+        self.assertIn("scripts/inspect_submissions.py", workflow)
+        self.assertNotIn("gh release download", workflow)
+        self.assertNotIn("install_reference.py", workflow)
+        self.assertNotIn("scoring/scorecard.py", workflow)
+
     def test_html_local_assets_exist(self):
         parser = LocalReferences()
         parser.feed((ROOT / "lab-guide.html").read_text())
